@@ -1,6 +1,7 @@
 name: Validate ADRs
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
