@@ -1,0 +1,72 @@
+name: 'Structured MADR Validator'
+description: 'Validates Architectural Decision Records against the Structured MADR specification'
+author: 'zircote'
+
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  path:
+    description: 'Path to the directory containing ADR files (relative to repository root)'
+    required: false
+    default: 'docs/decisions'
+  pattern:
+    description: 'Glob pattern for ADR files'
+    required: false
+    default: '**/*.md'
+  schema:
+    description: 'Path to custom JSON Schema (uses built-in schema if not specified)'
+    required: false
+    default: ''
+  strict:
+    description: 'Enable strict mode (fail on warnings)'
+    required: false
+    default: 'false'
+  fail-on-error:
+    description: 'Fail the workflow if validation errors are found'
+    required: false
+    default: 'true'
+
+outputs:
+  valid:
+    description: 'Whether all ADRs passed validation'
+    value: ${{ steps.validate.outputs.valid }}
+  total:
+    description: 'Total number of ADR files checked'
+    value: ${{ steps.validate.outputs.total }}
+  passed:
+    description: 'Number of ADR files that passed validation'
+    value: ${{ steps.validate.outputs.passed }}
+  failed:
+    description: 'Number of ADR files that failed validation'
+    value: ${{ steps.validate.outputs.failed }}
+  warnings:
+    description: 'Number of warnings generated'
+    value: ${{ steps.validate.outputs.warnings }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --ignore-scripts
+
+    - name: Run validation
+      id: validate
+      shell: bash
+      env:
+        INPUT_PATH: ${{ inputs.path }}
+        INPUT_PATTERN: ${{ inputs.pattern }}
+        INPUT_SCHEMA: ${{ inputs.schema }}
+        INPUT_STRICT: ${{ inputs.strict }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail-on-error }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        node "$ACTION_PATH/src/validate.js"

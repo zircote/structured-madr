@@ -1,0 +1,42 @@
+{
+  "name": "structured-madr-validator",
+  "version": "1.0.0",
+  "description": "Validates Architectural Decision Records against the Structured MADR specification",
+  "main": "src/validate.js",
+  "type": "module",
+  "scripts": {
+    "validate": "node src/validate.js",
+    "test": "node --test src/**/*.test.js",
+    "lint": "eslint src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zircote/structured-madr.git"
+  },
+  "keywords": [
+    "adr",
+    "architecture",
+    "decision-records",
+    "madr",
+    "validation",
+    "github-action"
+  ],
+  "author": "zircote",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zircote/structured-madr/issues"
+  },
+  "homepage": "https://github.com/zircote/structured-madr#readme",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "glob": "^11.0.0",
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
