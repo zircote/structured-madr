@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/zircote/structured-madr/schemas/structured-madr.schema.json",
+  "title": "Structured MADR Frontmatter",
+  "description": "JSON Schema for validating Structured MADR YAML frontmatter",
+  "type": "object",
+  "required": [
+    "title",
+    "description",
+    "type",
+    "category",
+    "tags",
+    "status",
+    "created",
+    "updated",
+    "author",
+    "project"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Short descriptive title for the decision",
+      "minLength": 1,
+      "maxLength": 100,
+      "examples": ["Use PostgreSQL for Primary Storage"]
+    },
+    "description": {
+      "type": "string",
+      "description": "One-sentence summary of the decision",
+      "minLength": 1,
+      "maxLength": 300,
+      "examples": ["Decision to adopt PostgreSQL as the primary database for the application"]
+    },
+    "type": {
+      "type": "string",
+      "description": "Document type identifier",
+      "const": "adr"
+    },
+    "category": {
+      "type": "string",
+      "description": "The category of decision",
+      "minLength": 1,
+      "examples": ["architecture", "api", "security", "performance", "infrastructure", "migration", "integration", "data", "testing"]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Keywords for categorization and search",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$"
+      },
+      "uniqueItems": true,
+      "examples": [["database", "postgresql", "storage"]]
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the decision",
+      "enum": ["proposed", "accepted", "deprecated", "superseded"]
+    },
+    "created": {
+      "type": "string",
+      "description": "Date the ADR was created (ISO 8601)",
+      "format": "date",
+      "examples": ["2025-01-15"]
+    },
+    "updated": {
+      "type": "string",
+      "description": "Date the ADR was last modified (ISO 8601)",
+      "format": "date",
+      "examples": ["2025-01-20"]
+    },
+    "author": {
+      "type": "string",
+      "description": "The author or team responsible for the decision",
+      "minLength": 1,
+      "examples": ["Architecture Team", "Jane Doe"]
+    },
+    "project": {
+      "type": "string",
+      "description": "The project this decision applies to",
+      "minLength": 1,
+      "examples": ["my-application", "subcog"]
+    },
+    "technologies": {
+      "type": "array",
+      "description": "Technologies referenced or affected by this decision",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "examples": [["postgresql", "rust", "tokio"]]
+    },
+    "audience": {
+      "type": "array",
+      "description": "Intended readers of this ADR",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "examples": [["developers", "architects"]]
+    },
+    "related": {
+      "type": "array",
+      "description": "Filenames of related ADRs",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_-]+\\.md$"
+      },
+      "uniqueItems": true,
+      "examples": [["adr_0001.md", "adr_0005.md"]]
+    }
+  },
+  "additionalProperties": {
+    "description": "Custom extension fields should be prefixed with 'x-'",
+    "if": {
+      "propertyNames": {
+        "pattern": "^x-"
+      }
+    }
+  },
+  "examples": [
+    {
+      "title": "Use PostgreSQL for Primary Storage",
+      "description": "Decision to adopt PostgreSQL as the primary database for the application",
+      "type": "adr",
+      "category": "architecture",
+      "tags": ["database", "postgresql", "storage"],
+      "status": "accepted",
+      "created": "2025-01-15",
+      "updated": "2025-01-20",
+      "author": "Architecture Team",
+      "project": "my-application",
+      "technologies": ["postgresql", "rust"],
+      "audience": ["developers", "architects"],
+      "related": ["adr_0001.md"]
+    }
+  ]
+}
