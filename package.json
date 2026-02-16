@@ -5,6 +5,10 @@
   "main": "src/validate.js",
   "type": "module",
   "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "generate:spec": "node scripts/generate-spec-pages.mjs",
     "validate": "node src/validate.js",
     "test": "node --test src/**/*.test.js",
     "lint": "eslint src/"
@@ -34,6 +38,8 @@
     "yaml": "^2.7.0"
   },
   "devDependencies": {
+    "astro": "^5.17.2",
+    "@astrojs/starlight": "^0.37.6",
     "eslint": "^9.0.0"
   },
   "engines": {
