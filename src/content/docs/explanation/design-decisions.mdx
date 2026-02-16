@@ -1,0 +1,87 @@
+---
+title: "Design Decisions"
+description: "Key design decisions behind the Structured MADR specification"
+---
+
+This page summarizes the architectural decisions that shaped Structured MADR. Each decision is documented as a formal ADR in the project's [`docs/decisions/`](https://github.com/zircote/structured-madr/tree/main/docs/decisions) directory, following the Structured MADR format itself (dogfooding).
+
+## Why YAML Frontmatter
+
+**Decision:** Require YAML frontmatter for machine-readable metadata in every ADR.
+
+YAML was chosen over alternatives (JSON, TOML, custom syntax) because of its broad tooling support. Nearly every programming language has a YAML parser, and YAML frontmatter is already a convention in static site generators (Jekyll, Hugo, Astro), documentation tools, and content management systems.
+
+The frontmatter block serves as a structured index for each ADR. Tools can read metadata -- status, category, tags, technologies, dates, relationships -- without parsing the markdown body. This enables programmatic filtering, search, reporting, and AI-assisted discovery.
+
+All 10 required fields were chosen to provide the minimum metadata needed for effective tooling while avoiding excessive overhead for authors.
+
+## Why a Required Audit Section
+
+**Decision:** Make the Audit section mandatory in every ADR.
+
+The audit section exists to bridge the gap between "decision made" and "decision implemented correctly." In compliance-driven environments (SOC2, HIPAA, ISO 27001), auditors need evidence that architectural decisions were followed through. The findings table provides that evidence by linking assessments to specific files and line numbers.
+
+Even outside regulated industries, the audit section serves as a lightweight implementation checklist. Teams can use it to track whether a decision has been implemented, partially implemented, or deferred.
+
+The section is required rather than optional because making it optional would mean most teams skip it entirely, losing the compliance and tracking benefits that distinguish Structured MADR from other formats.
+
+## Why Three-Dimension Risk Assessment
+
+**Decision:** Evaluate each considered option across Technical Risk, Schedule Risk, and Ecosystem Risk.
+
+Traditional ADR formats use informal pros and cons lists. While useful, these lists do not provide a consistent framework for comparing options. The three-dimension risk model addresses this:
+
+- **Technical Risk** captures implementation complexity, performance concerns, and reliability unknowns.
+- **Schedule Risk** captures time-to-implement, learning curve, and delivery uncertainty.
+- **Ecosystem Risk** captures dependency health, community support, and long-term viability.
+
+Each dimension is rated Low, Medium, or High with a brief explanation. This provides enough structure for meaningful comparison without turning every ADR into a formal risk register.
+
+## Why Categorized Consequences
+
+**Decision:** Split consequences into Positive, Negative, and Neutral categories instead of a single list.
+
+A single consequences list makes it difficult to quickly assess the trade-offs of a decision. By separating consequences into three categories, readers can immediately see what the decision gains, what it costs, and what changes without clear directional impact.
+
+This categorization also forces authors to think more carefully about trade-offs. A decision with no listed negative consequences is likely missing something. The structure prompts honest assessment.
+
+## Why MADR Compatibility
+
+**Decision:** Follow MADR 4.0.0 section conventions as the base structure.
+
+Structured MADR is designed as an extension of MADR, not a replacement. The section structure deliberately mirrors MADR conventions so that teams familiar with MADR can adopt Structured MADR with minimal adjustment.
+
+Key compatibility decisions:
+- Section headings match MADR naming conventions
+- Status values (`proposed`, `accepted`, `deprecated`, `superseded`) are the same as MADR
+- The overall flow (Context, Drivers, Options, Decision, Consequences) follows MADR ordering
+- Additional sections (Risk Assessment, Audit) are additive rather than replacing existing MADR sections
+
+This compatibility also means that migration from MADR to Structured MADR is straightforward: add frontmatter, expand consequences into categories, add risk assessments, and include an audit section.
+
+## Why Dogfooding
+
+**Decision:** Use Structured MADR for the project's own architectural decisions (ADR-0001).
+
+A project that defines an ADR format but does not use it lacks credibility. Dogfooding serves three purposes:
+
+1. **Validation** -- Real usage surfaces specification issues that review alone cannot find.
+2. **Exemplars** -- Project ADRs serve as reference implementations for users to study.
+3. **Testing** -- The project's validation tooling is tested against its own documents.
+
+The project currently maintains ADRs documenting the adoption of the format itself (ADR-0001) and the creation of the GitHub Action validator (ADR-0002).
+
+## Why a GitHub Action Validator
+
+**Decision:** Provide an official composite GitHub Action for ADR validation (ADR-0002).
+
+Specification adoption correlates directly with tooling availability. Without easy-to-use validation, teams either skip validation entirely or implement incomplete custom solutions.
+
+The GitHub Action was chosen as the primary distribution mechanism because GitHub Actions is the dominant CI platform for open-source projects. The action uses a composite design with a Node.js validator, leveraging the `ajv` library for JSON Schema validation and custom logic for body structure checks.
+
+Key design choices:
+- **Composite action** over Docker for faster startup and simpler maintenance
+- **Node.js runtime** for cross-platform compatibility and rich JSON Schema support via ajv
+- **Configurable inputs** for path, pattern, schema, strictness, and failure behavior
+- **GitHub annotations** for inline PR feedback pointing to specific validation errors
+- **Semantic versioning** so consuming projects can pin to stable releases

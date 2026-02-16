@@ -1,0 +1,185 @@
+---
+title: "YAML Frontmatter"
+description: "Required and optional YAML frontmatter fields for Structured MADR documents."
+---
+
+# 3. YAML Frontmatter
+
+## 3.1 Format
+
+The frontmatter MUST be enclosed in YAML document markers (`---`) at the beginning of the file.
+
+```yaml
+---
+# Frontmatter content
+---
+```
+
+## 3.2 Required Fields
+
+The following fields MUST be present in every Structured MADR document:
+
+### 3.2.1 `title`
+
+- **Type:** string
+- **Description:** A short, descriptive title for the decision
+- **Constraints:**
+  - MUST be non-empty
+  - SHOULD be 60 characters or fewer
+  - SHOULD use title case
+
+```yaml
+title: "Use PostgreSQL for Primary Storage"
+```
+
+### 3.2.2 `description`
+
+- **Type:** string
+- **Description:** A one-sentence summary of the decision
+- **Constraints:**
+  - MUST be non-empty
+  - SHOULD be 160 characters or fewer
+
+```yaml
+description: "Decision to adopt PostgreSQL as the primary database for the application"
+```
+
+### 3.2.3 `type`
+
+- **Type:** string
+- **Description:** Document type identifier
+- **Constraints:**
+  - MUST be exactly `"adr"`
+
+```yaml
+type: adr
+```
+
+### 3.2.4 `category`
+
+- **Type:** string
+- **Description:** The category of decision
+- **Constraints:**
+  - MUST be non-empty
+  - RECOMMENDED values: `architecture`, `api`, `security`, `performance`, `infrastructure`, `migration`, `integration`, `data`, `testing`
+
+```yaml
+category: architecture
+```
+
+### 3.2.5 `tags`
+
+- **Type:** array of strings
+- **Description:** Keywords for categorization and search
+- **Constraints:**
+  - MUST contain at least one tag
+  - Tags SHOULD be lowercase with hyphens for multi-word tags
+
+```yaml
+tags:
+  - database
+  - postgresql
+  - storage
+```
+
+### 3.2.6 `status`
+
+- **Type:** string (enum)
+- **Description:** Current status of the decision
+- **Allowed Values:**
+  - `proposed` - Decision is under consideration
+  - `accepted` - Decision has been approved and is in effect
+  - `deprecated` - Decision is no longer recommended
+  - `superseded` - Decision has been replaced by another ADR
+- **Constraints:**
+  - MUST be one of the allowed values
+
+```yaml
+status: accepted
+```
+
+### 3.2.7 `created`
+
+- **Type:** date
+- **Description:** Date the ADR was created
+- **Format:** ISO 8601 date (YYYY-MM-DD)
+
+```yaml
+created: 2025-01-15
+```
+
+### 3.2.8 `updated`
+
+- **Type:** date
+- **Description:** Date the ADR was last modified
+- **Format:** ISO 8601 date (YYYY-MM-DD)
+- **Constraints:**
+  - MUST be greater than or equal to `created`
+
+```yaml
+updated: 2025-01-20
+```
+
+### 3.2.9 `author`
+
+- **Type:** string
+- **Description:** The author or team responsible for the decision
+- **Constraints:**
+  - MUST be non-empty
+
+```yaml
+author: Architecture Team
+```
+
+### 3.2.10 `project`
+
+- **Type:** string
+- **Description:** The project this decision applies to
+- **Constraints:**
+  - MUST be non-empty
+  - SHOULD be a consistent identifier across all project ADRs
+
+```yaml
+project: my-application
+```
+
+## 3.3 Optional Fields
+
+The following fields MAY be present:
+
+### 3.3.1 `technologies`
+
+- **Type:** array of strings
+- **Description:** Technologies referenced or affected by this decision
+
+```yaml
+technologies:
+  - postgresql
+  - rust
+  - tokio
+```
+
+### 3.3.2 `audience`
+
+- **Type:** array of strings
+- **Description:** Intended readers of this ADR
+- **RECOMMENDED values:** `developers`, `architects`, `operators`, `stakeholders`
+
+```yaml
+audience:
+  - developers
+  - architects
+```
+
+### 3.3.3 `related`
+
+- **Type:** array of strings
+- **Description:** Filenames of related ADRs
+- **Constraints:**
+  - SHOULD be relative filenames within the same ADR directory
+
+```yaml
+related:
+  - adr_0001.md
+  - adr_0005.md
+```

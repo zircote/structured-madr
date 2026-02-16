@@ -1,0 +1,64 @@
+---
+title: "Overview"
+description: "Introduction to the Structured MADR specification, purpose, design goals, and document structure."
+---
+
+# Structured MADR Specification
+
+**Version:** 1.0.0
+**Status:** Stable
+**Last Updated:** 2026-01-15
+
+## Abstract
+
+This document specifies the Structured MADR format, an extension of MADR (Markdown Architectural Decision Records) that adds machine-readable YAML frontmatter, comprehensive option analysis with risk assessments, and required audit sections for compliance tracking.
+
+---
+
+## Status of This Document
+
+This is the official specification for Structured MADR version 1.0.0. The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
+---
+
+## 1. Introduction
+
+### 1.1 Purpose
+
+Structured MADR provides a standardized format for documenting architectural decisions that is:
+
+1. **Human-readable** - Clear prose documentation for developers
+2. **Machine-parseable** - Structured metadata for tooling
+3. **Auditable** - Built-in compliance tracking
+4. **Comprehensive** - Complete option analysis with risk assessment
+
+### 1.2 Relationship to MADR
+
+Structured MADR is a superset of MADR 4.0.0. Any valid MADR document can be converted to Structured MADR by adding the required frontmatter and audit section. The body sections follow MADR conventions with extensions for hierarchical organization.
+
+### 1.3 Design Goals
+
+1. **Backward Compatibility** - MADR-compatible section structure
+2. **Forward Compatibility** - Extensible frontmatter schema
+3. **Tool Interoperability** - Standard YAML and Markdown
+4. **AI Optimization** - Metadata designed for LLM context injection
+
+---
+
+## 2. Document Structure
+
+A Structured MADR document MUST contain the following components in order:
+
+1. YAML Frontmatter (Section 3)
+2. Title (Section 4.1)
+3. Status Section (Section 4.2)
+4. Context Section (Section 4.3)
+5. Decision Drivers Section (Section 4.4)
+6. Considered Options Section (Section 4.5)
+7. Decision Section (Section 4.6)
+8. Consequences Section (Section 4.7)
+9. Decision Outcome Section (Section 4.8)
+10. Related Decisions Section (Section 4.9)
+11. Links Section (Section 4.10)
+12. More Information Section (Section 4.11)
+13. Audit Section (Section 4.12)

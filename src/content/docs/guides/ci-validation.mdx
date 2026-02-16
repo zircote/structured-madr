@@ -1,0 +1,197 @@
+---
+title: "Set Up CI Validation"
+description: "Automatically validate Structured MADR documents in your CI/CD pipeline."
+---
+
+The Structured MADR GitHub Action validates your ADR files on every push or pull request,
+catching formatting errors and missing fields before they reach your main branch.
+
+## Basic Setup
+
+Create a workflow file at `.github/workflows/validate-adrs.yml`:
+
+```yaml
+name: Validate ADRs
+
+on:
+  push:
+    paths:
+      - 'docs/decisions/**'
+  pull_request:
+    paths:
+      - 'docs/decisions/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Structured MADR
+        uses: zircote/structured-madr@v1
+        with:
+          path: docs/decisions
+          pattern: '**/*.md'
+          strict: 'false'
+          fail-on-error: 'true'
+```
+
+This workflow runs whenever markdown files under `docs/decisions/` change.
+
+## Action Inputs
+
+| Input           | Description                                      | Default           |
+|-----------------|--------------------------------------------------|--------------------|
+| `path`          | Directory containing ADR files (relative to repo root) | `docs/decisions`  |
+| `pattern`       | Glob pattern for matching ADR files               | `**/*.md`          |
+| `schema`        | Path to a custom JSON Schema file                 | Built-in schema    |
+| `strict`        | Fail on warnings in addition to errors            | `false`            |
+| `fail-on-error` | Fail the workflow when validation errors are found | `true`            |
+
+### Notes on inputs
+
+- **path**: Must be relative to the repository root. The action scans this directory recursively.
+- **pattern**: Use this to filter files within the path directory. For example, `ADR-*.md`
+  would only match files starting with `ADR-`.
+- **schema**: Leave empty to use the built-in Structured MADR schema. Provide a path to
+  override with your organization's custom schema.
+- **strict**: When enabled, warnings (such as missing optional fields) are treated as errors.
+  Useful for teams that want to enforce complete metadata.
+
+## Action Outputs
+
+The action exposes outputs you can reference in subsequent workflow steps:
+
+| Output     | Description                            |
+|------------|----------------------------------------|
+| `valid`    | Whether all ADRs passed validation      |
+| `total`    | Total number of ADR files checked       |
+| `passed`   | Number of files that passed             |
+| `failed`   | Number of files that failed             |
+| `warnings` | Number of warnings generated            |
+
+### Using outputs in subsequent steps
+
+```yaml
+- name: Validate Structured MADR
+  id: adr-check
+  uses: zircote/structured-madr@v1
+  with:
+    path: docs/decisions
+
+- name: Report results
+  if: always()
+  run: |
+    echo "Valid: ${{ steps.adr-check.outputs.valid }}"
+    echo "Checked ${{ steps.adr-check.outputs.total }} files"
+    echo "Passed: ${{ steps.adr-check.outputs.passed }}"
+    echo "Failed: ${{ steps.adr-check.outputs.failed }}"
+    echo "Warnings: ${{ steps.adr-check.outputs.warnings }}"
+```
+
+## Configuration Examples
+
+### Strict mode for regulated projects
+
+For compliance-driven teams that need every field populated:
+
+```yaml
+- name: Validate Structured MADR (strict)
+  uses: zircote/structured-madr@v1
+  with:
+    path: docs/decisions
+    strict: 'true'
+    fail-on-error: 'true'
+```
+
+### Custom ADR directory
+
+If your ADRs live somewhere other than `docs/decisions/`:
+
+```yaml
+- name: Validate Structured MADR
+  uses: zircote/structured-madr@v1
+  with:
+    path: architecture/adrs
+    pattern: '*.md'
+```
+
+### Non-blocking validation
+
+Run validation as an informational check without blocking merges:
+
+```yaml
+- name: Validate Structured MADR
+  uses: zircote/structured-madr@v1
+  with:
+    path: docs/decisions
+    fail-on-error: 'false'
+```
+
+### Custom schema
+
+Use your organization's extended schema:
+
+```yaml
+- name: Validate Structured MADR
+  uses: zircote/structured-madr@v1
+  with:
+    path: docs/decisions
+    schema: '.github/schemas/custom-adr-schema.json'
+```
+
+### Validate on schedule
+
+Run periodic validation to catch drift, even when ADR files have not changed:
+
+```yaml
+name: Weekly ADR Audit
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Structured MADR
+        uses: zircote/structured-madr@v1
+        with:
+          path: docs/decisions
+          strict: 'true'
+```
+
+## Troubleshooting
+
+### Action does not trigger
+
+Verify the `paths` filter matches your ADR directory. If your ADRs are in `architecture/decisions/`,
+update the workflow trigger accordingly:
+
+```yaml
+on:
+  push:
+    paths:
+      - 'architecture/decisions/**'
+```
+
+### Validation passes locally but fails in CI
+
+The CI environment checks out a clean copy of your repository. Ensure all ADR files are
+committed and not listed in `.gitignore`.
+
+### Schema validation errors on optional fields
+
+If you see errors about `technologies` or `audience`, ensure these fields are arrays
+(even if empty). The schema requires the correct type when the field is present:
+
+```yaml
+# Correct
+technologies: []
+
+# Incorrect -- do not use null
+technologies: null
+```

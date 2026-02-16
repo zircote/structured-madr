@@ -1,0 +1,57 @@
+---
+title: "Extensions & Appendices"
+description: "Custom extensions, MIME type, security considerations, and appendices for the Structured MADR specification."
+---
+
+# 7. Extensions
+
+## 7.1 Custom Frontmatter Fields
+
+Implementations MAY add custom frontmatter fields prefixed with `x-`:
+
+```yaml
+x-review-board: ["alice", "bob"]
+x-implementation-phase: 2
+```
+
+Custom fields MUST NOT conflict with reserved field names.
+
+## 7.2 Custom Sections
+
+Implementations MAY add custom sections after the Audit section.
+
+---
+
+# 8. MIME Type
+
+The RECOMMENDED MIME type for Structured MADR documents is:
+
+```
+text/markdown; variant=structured-madr
+```
+
+---
+
+# 9. Security Considerations
+
+- Frontmatter SHOULD NOT contain sensitive information
+- File paths in audit findings SHOULD be relative
+- External links SHOULD use HTTPS
+
+---
+
+# Appendix A: Complete Example
+
+See `examples/complete-example.md` for a fully compliant example.
+
+---
+
+# Appendix B: Changelog
+
+## Version 1.0.0 (2026-01-15)
+
+- Initial release
+- YAML frontmatter specification
+- Body section requirements
+- Audit section specification
+- JSON Schema definition

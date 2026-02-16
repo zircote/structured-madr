@@ -1,0 +1,166 @@
+---
+title: "Validate Locally"
+description: "Validate your Structured MADR documents before committing using CLI tools."
+---
+
+Running validation locally catches errors before they reach CI. Structured MADR supports
+three validation approaches: the built-in CLI validator, `ajv-cli` for JSON Schema checks,
+and `check-jsonschema` for Python-based environments.
+
+## Built-in CLI Validator
+
+The project includes a Node.js-based validator that checks both frontmatter schema compliance
+and document structure.
+
+### Setup
+
+```bash
+git clone https://github.com/zircote/structured-madr.git
+cd structured-madr
+npm install
+```
+
+### Run validation
+
+Point the validator at your ADR directory using the `INPUT_PATH` environment variable:
+
+```bash
+INPUT_PATH=/path/to/your/docs/decisions npm run validate
+```
+
+The validator checks every markdown file in the specified directory and reports:
+- Missing or malformed YAML frontmatter
+- Required fields that are absent or have incorrect types
+- Invalid `status` values
+- Structural issues in the document body
+
+### Example output
+
+```
+Checking: 0001-select-primary-database.md
+  PASS  Frontmatter is valid
+  PASS  All required sections present
+  PASS  Audit section found
+
+Checking: 0002-caching-strategy.md
+  FAIL  Missing required field: author
+  WARN  Optional field 'technologies' is empty
+
+Results: 1 passed, 1 failed, 1 warning
+```
+
+## Schema Validation with ajv-cli
+
+For teams that prefer validating just the frontmatter against the JSON Schema, `ajv-cli`
+provides a lightweight option.
+
+### Install
+
+```bash
+npm install -g ajv-cli
+```
+
+### Validate a single file
+
+```bash
+npx ajv validate \
+  -s schemas/structured-madr.schema.json \
+  -d docs/decisions/0001-select-primary-database.md
+```
+
+### Validate all ADRs
+
+```bash
+npx ajv validate \
+  -s schemas/structured-madr.schema.json \
+  -d "docs/decisions/*.md"
+```
+
+### Notes
+
+- `ajv-cli` validates the YAML frontmatter against the JSON Schema only. It does not check
+  the markdown body structure.
+- The schema file is located at `schemas/structured-madr.schema.json` in the Structured MADR
+  repository.
+
+## Schema Validation with check-jsonschema
+
+If your team uses Python tooling, `check-jsonschema` is an alternative that works without Node.js.
+
+### Install
+
+```bash
+pip install check-jsonschema
+```
+
+### Validate
+
+```bash
+check-jsonschema \
+  --schemafile schemas/structured-madr.schema.json \
+  docs/decisions/0001-select-primary-database.md
+```
+
+### Validate multiple files
+
+```bash
+check-jsonschema \
+  --schemafile schemas/structured-madr.schema.json \
+  docs/decisions/*.md
+```
+
+## Adding Validation to Git Hooks
+
+Catch errors before they leave your machine by adding a pre-commit hook.
+
+### Using a shell script
+
+Create `.git/hooks/pre-commit`:
+
+```bash
+#!/bin/bash
+# Validate any staged ADR files
+STAGED_ADRS=$(git diff --cached --name-only --diff-filter=ACM -- 'docs/decisions/*.md')
+
+if [ -n "$STAGED_ADRS" ]; then
+  echo "Validating staged ADR files..."
+  INPUT_PATH=docs/decisions npm run validate --prefix /path/to/structured-madr
+  if [ $? -ne 0 ]; then
+    echo "ADR validation failed. Fix errors before committing."
+    exit 1
+  fi
+fi
+```
+
+Make it executable:
+
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+### Using pre-commit framework
+
+If your project uses the [pre-commit](https://pre-commit.com/) framework, add a local hook
+in `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: validate-adrs
+        name: Validate Structured MADR
+        entry: bash -c 'INPUT_PATH=docs/decisions npm run validate --prefix /path/to/structured-madr'
+        language: system
+        files: 'docs/decisions/.*\.md$'
+```
+
+## Choosing a Validation Approach
+
+| Approach           | Checks frontmatter | Checks structure | Requires   |
+|--------------------|--------------------|--------------------|------------|
+| Built-in CLI       | Yes                | Yes                | Node.js    |
+| ajv-cli            | Yes                | No                 | Node.js    |
+| check-jsonschema   | Yes                | No                 | Python     |
+
+For the most thorough local validation, use the built-in CLI. For quick frontmatter-only
+checks, either `ajv-cli` or `check-jsonschema` will work depending on your toolchain.

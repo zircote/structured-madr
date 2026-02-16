@@ -1,0 +1,68 @@
+---
+title: "Why Structured MADR"
+description: "Motivation, goals, and ideal use cases for Structured MADR"
+---
+
+## The Problem with Traditional ADRs
+
+Architectural Decision Records have been a cornerstone of software documentation since Michael Nygard introduced the concept in 2011. Formats like Nygard's original, MADR, Y-Statements, and Tyree-Akerman each bring different strengths. However, all share a common limitation: they were designed exclusively for human readers.
+
+As codebases grow and AI-assisted development becomes standard practice, this limitation creates real friction:
+
+- **No machine-readable metadata.** Tools cannot programmatically filter, search, or classify decisions without parsing free-form prose.
+- **No structured risk assessment.** Option evaluation is informal, making it difficult to compare trade-offs systematically.
+- **No audit trail.** Compliance-driven organizations have no built-in mechanism to track whether decisions were implemented correctly.
+- **No explicit relationships.** Connections between decisions are buried in prose rather than expressed as queryable data.
+
+## What Structured MADR Adds
+
+Structured MADR extends the MADR format with four key capabilities:
+
+### YAML Frontmatter
+
+Every ADR begins with a YAML block containing standardized metadata: title, description, status, dates, author, project, category, tags, technologies, audience, and relationships. This metadata is validated against a JSON Schema and can be parsed by any tool that reads YAML.
+
+### Risk Assessment
+
+Each considered option includes a three-dimension risk assessment covering technical risk, schedule risk, and ecosystem risk. Each dimension is rated Low, Medium, or High with a brief explanation. This structured approach replaces informal "pros and cons" with a consistent evaluation framework.
+
+### Categorized Consequences
+
+Instead of a single list of consequences, Structured MADR separates them into positive, negative, and neutral outcomes. This forces authors to think through trade-offs explicitly and makes it easier for readers to quickly assess impact.
+
+### Required Audit Section
+
+Every ADR includes a mandatory Audit section with dated entries, compliance status, and a findings table linking assessments to specific files and line numbers. This supports organizations that need to demonstrate decision compliance for SOC2, HIPAA, ISO 27001, or similar frameworks.
+
+## Ideal Use Cases
+
+### Compliance-Driven Projects
+
+If your organization operates under regulatory requirements (SOC2, HIPAA, ISO 27001, FedRAMP), the audit section provides built-in compliance tracking. Auditors can review the findings table to verify that decisions were implemented as documented.
+
+### AI-Assisted Development
+
+Tools like Claude Code, GitHub Copilot, and Cursor can leverage YAML frontmatter to filter relevant decisions without parsing prose. The `category`, `tags`, `technologies`, and `project` fields let AI tools scope their context to decisions that matter for the current task.
+
+### Large Codebases
+
+When a project has dozens or hundreds of ADRs, discovery becomes a challenge. Machine-readable metadata enables search and filtering by status, category, technology, author, or date range -- capabilities that are impossible with unstructured formats.
+
+### Long-Lived Projects
+
+Projects that span years accumulate decisions that outlive the people who made them. The audit trail and explicit relationships help new team members understand not just what was decided, but whether it was implemented correctly and how it connects to other decisions.
+
+### Enterprise Architecture
+
+Organizations with governance requirements benefit from structured metadata, status tracking, and the ability to programmatically report on decision status across multiple projects.
+
+## When to Consider Alternatives
+
+Structured MADR is not the right choice for every situation:
+
+- **Quick, informal decisions** -- Use [Nygard's original format](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) for lightweight capture with minimal ceremony.
+- **Single-sentence capture** -- Use [Y-Statements](https://medium.com/olzzio/y-statements-10eb07b5a177) when you need just one sentence documenting the decision.
+- **Minimal overhead** -- Use [MADR Minimal](https://adr.github.io/madr/) when the full Structured MADR template feels like too much for the decision at hand.
+- **Prototypes or throwaway projects** -- If the project will not outlive the current sprint, formal ADRs add overhead without proportional value.
+
+The right format depends on your team's needs. Structured MADR is designed for situations where the additional structure pays for itself through better tooling, compliance, and long-term maintainability.

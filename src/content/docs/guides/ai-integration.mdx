@@ -1,0 +1,169 @@
+---
+title: "Integrate with AI Tools"
+description: "Leverage Structured MADR frontmatter to enhance AI-assisted development workflows."
+---
+
+Structured MADR was designed with AI tooling in mind. The YAML frontmatter provides
+machine-readable metadata that AI coding assistants can parse, filter, and reason about
+without scanning full document prose.
+
+## How Frontmatter Enables AI Tools
+
+Traditional ADRs store all information in unstructured prose. An AI tool must read the
+entire document to determine basic facts like status, technologies, or relationships.
+Structured MADR solves this with typed frontmatter fields:
+
+| Capability                  | Frontmatter Field          |
+|-----------------------------|----------------------------|
+| Filter relevant decisions   | `tags`, `category`          |
+| Understand relationships    | `related`                   |
+| Track freshness             | `created`, `updated`        |
+| Scope by context            | `project`, `category`       |
+| Surface by technology       | `technologies`              |
+| Identify audience           | `audience`                  |
+| Check decision status       | `status`                    |
+
+An AI assistant can scan frontmatter across dozens of ADRs in milliseconds, then read the
+full body only for the relevant documents.
+
+## Integration Patterns
+
+### Claude Code
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) can reference your ADRs
+as project context. With Structured MADR, Claude can efficiently filter decisions by
+technology, status, or project.
+
+**Recommended setup**: Add an instruction in your `CLAUDE.md` that points to your ADR directory:
+
+```markdown
+## Architecture Decisions
+
+ADRs are stored in `docs/decisions/` using the Structured MADR format.
+Before proposing architectural changes, check existing ADRs for relevant context.
+Filter by the `technologies` and `tags` frontmatter fields to find related decisions.
+```
+
+Claude Code can then:
+- Search ADRs by `technologies` field to find decisions about specific tools
+- Check `status` to know which decisions are active vs. deprecated
+- Follow `related` links to understand decision chains
+- Read audit sections to verify implementation compliance
+
+### ADR Plugin for Claude Code
+
+The [ADR Plugin for Claude Code](https://github.com/zircote/marketplace/tree/main/plugins/adr)
+provides full lifecycle management of Structured MADR documents:
+
+- Create new ADRs from templates
+- Search and filter existing decisions
+- Update status and audit entries
+- Validate documents against the schema
+
+Install the plugin to give Claude Code native commands for ADR management.
+
+### GitHub Copilot
+
+GitHub Copilot can use your ADRs as context when suggesting code. Structured frontmatter
+helps Copilot understand which decisions apply to the file being edited.
+
+**Tips for Copilot integration**:
+- Keep ADRs in a well-known directory (`docs/decisions/`)
+- Use descriptive `tags` and `technologies` values that match your codebase terminology
+- Ensure `status` is current so Copilot does not reference deprecated decisions
+
+### Cursor
+
+[Cursor](https://cursor.com) indexes project files for its AI features. Structured MADR
+frontmatter improves Cursor's ability to surface relevant decisions.
+
+**Recommended setup**: Add your ADR directory to Cursor's context with a `.cursorrules` file:
+
+```
+When making architectural decisions, reference existing ADRs in docs/decisions/.
+ADRs use Structured MADR format with YAML frontmatter containing status, tags,
+technologies, and related fields.
+```
+
+## Optimizing Your ADRs for AI Consumption
+
+### Use specific, consistent tags
+
+Tags are the primary filter mechanism for AI tools. Use consistent terminology:
+
+```yaml
+# Good -- specific and consistent
+tags:
+  - authentication
+  - oauth2
+  - identity-provider
+
+# Avoid -- vague and inconsistent
+tags:
+  - auth
+  - security stuff
+```
+
+### Keep the technologies field accurate
+
+List all technologies evaluated, not just the chosen one. This ensures the ADR surfaces
+when an AI tool searches for any of the evaluated options:
+
+```yaml
+technologies:
+  - postgresql
+  - mysql
+  - mongodb
+```
+
+### Maintain the related field
+
+Explicit relationships help AI tools build a graph of connected decisions:
+
+```yaml
+related:
+  - 0001-select-primary-database.md
+  - 0003-caching-strategy.md
+```
+
+Without `related`, AI tools must infer connections from prose, which is slower and less reliable.
+
+### Update status promptly
+
+An outdated `status` field causes AI tools to recommend deprecated approaches:
+
+| Status       | AI behavior                                   |
+|--------------|-----------------------------------------------|
+| `proposed`   | May suggest alternatives or improvements       |
+| `accepted`   | References as current guidance                 |
+| `deprecated` | Warns against following this approach          |
+| `superseded` | Points to the replacement decision             |
+
+### Write clear descriptions
+
+The `description` field is a one-sentence summary that AI tools use for quick triage:
+
+```yaml
+# Good -- specific and actionable
+description: "Adopt PostgreSQL over MySQL for JSONB support and advanced indexing."
+
+# Avoid -- too vague
+description: "Database decision."
+```
+
+## Querying ADRs Programmatically
+
+Because frontmatter is valid YAML, you can query it with standard tools:
+
+```bash
+# Find all accepted ADRs about authentication
+grep -l "status: accepted" docs/decisions/*.md | \
+  xargs grep -l "authentication"
+
+# List all technologies across ADRs
+grep "^  - " docs/decisions/*.md | \
+  sed -n '/^.*technologies:/,/^[^ ]/p'
+```
+
+AI tools perform similar queries internally. The more consistent your frontmatter,
+the more accurately tools can filter and surface relevant decisions.

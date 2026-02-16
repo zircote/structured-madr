@@ -1,0 +1,145 @@
+---
+title: "GitHub Action"
+description: "Complete reference for the Structured MADR validation GitHub Action"
+---
+
+The Structured MADR Validator is a composite GitHub Action that validates your Architectural Decision Records against the Structured MADR specification. It checks both YAML frontmatter (via JSON Schema) and body structure (required sections, ordering).
+
+## Basic Usage
+
+```yaml
+# .github/workflows/validate-adrs.yml
+name: Validate ADRs
+
+on:
+  push:
+    paths:
+      - 'docs/decisions/**'
+  pull_request:
+    paths:
+      - 'docs/decisions/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Structured MADR
+        uses: zircote/structured-madr@v1
+        with:
+          path: docs/decisions
+```
+
+## Inputs
+
+All inputs are optional. The action uses sensible defaults that work for most projects.
+
+| Input | Type | Default | Description |
+|-------|------|---------|-------------|
+| `path` | `string` | `docs/decisions` | Path to the directory containing ADR files, relative to repository root |
+| `pattern` | `string` | `**/*.md` | Glob pattern for matching ADR files within the path |
+| `schema` | `string` | _(built-in)_ | Path to a custom JSON Schema. Omit to use the built-in Structured MADR schema |
+| `strict` | `string` | `false` | Enable strict mode: fail the check on warnings in addition to errors |
+| `fail-on-error` | `string` | `true` | Whether to fail the workflow step when validation errors are found |
+
+## Outputs
+
+The action sets these outputs for use in subsequent workflow steps.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `valid` | `string` | `"true"` if all ADRs passed validation, `"false"` otherwise |
+| `total` | `string` | Total number of ADR files checked |
+| `passed` | `string` | Number of files that passed validation |
+| `failed` | `string` | Number of files that failed validation |
+| `warnings` | `string` | Number of warnings generated |
+
+## Configuration Examples
+
+### Strict Mode
+
+Fail the workflow on any warnings, not just errors:
+
+```yaml
+- uses: zircote/structured-madr@v1
+  with:
+    strict: 'true'
+```
+
+### Custom ADR Directory
+
+If your ADRs live in a non-default location:
+
+```yaml
+- uses: zircote/structured-madr@v1
+  with:
+    path: architecture/decisions
+```
+
+### Custom Schema
+
+Validate against your own extended schema:
+
+```yaml
+- uses: zircote/structured-madr@v1
+  with:
+    schema: .github/schemas/custom-madr.schema.json
+```
+
+### Non-blocking Validation
+
+Report validation results without failing the workflow:
+
+```yaml
+- uses: zircote/structured-madr@v1
+  id: adr-check
+  with:
+    fail-on-error: 'false'
+
+- name: Report results
+  run: |
+    echo "Valid: ${{ steps.adr-check.outputs.valid }}"
+    echo "Passed: ${{ steps.adr-check.outputs.passed }}/${{ steps.adr-check.outputs.total }}"
+```
+
+### Using Outputs in Conditional Steps
+
+```yaml
+- uses: zircote/structured-madr@v1
+  id: validate
+  with:
+    fail-on-error: 'false'
+
+- name: Comment on PR
+  if: steps.validate.outputs.valid == 'false'
+  uses: actions/github-script@v7
+  with:
+    script: |
+      github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        body: `ADR validation failed: ${context.steps.validate.outputs.failed} of ${context.steps.validate.outputs.total} files have errors.`
+      })
+```
+
+## What Gets Validated
+
+The action performs two categories of validation:
+
+1. **Frontmatter validation** -- Checks YAML frontmatter against the JSON Schema, verifying required fields, types, formats, and constraints.
+2. **Body structure validation** -- Checks that the markdown body contains required sections in the correct order, including Status, Context, Decision Drivers, Considered Options, Decision, Consequences, and Audit.
+
+Validation errors appear as GitHub annotations on the pull request, pointing to specific lines in the file.
+
+## Local Validation
+
+You can run the same validation locally:
+
+```bash
+git clone https://github.com/zircote/structured-madr.git
+cd structured-madr
+npm install
+INPUT_PATH=/path/to/your/docs/decisions npm run validate
+```

@@ -1,0 +1,38 @@
+---
+title: "File Naming & Validation"
+description: "File naming conventions and validation requirements for Structured MADR documents."
+---
+
+# 5. File Naming
+
+Structured MADR files SHOULD follow the naming convention:
+
+```
+{NUMBER}-{slug}.md
+```
+
+Or:
+
+```
+adr_{NUMBER}.md
+```
+
+Where:
+- `{NUMBER}` is a zero-padded identifier (e.g., `0001`, `0042`)
+- `{slug}` is a URL-friendly version of the title
+
+Examples:
+- `0001-use-postgresql-for-primary-storage.md`
+- `adr_0001.md`
+
+---
+
+# 6. Validation
+
+A Structured MADR document is valid if:
+
+1. The YAML frontmatter is syntactically valid YAML
+2. All required frontmatter fields are present with valid values
+3. All required body sections are present
+4. The audit section contains at least one entry
+5. The document conforms to the JSON Schema in `schemas/structured-madr.schema.json`

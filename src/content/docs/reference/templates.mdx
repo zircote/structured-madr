@@ -1,0 +1,119 @@
+---
+title: "Templates"
+description: "Full and bare Structured MADR templates for creating new ADRs"
+---
+
+Structured MADR provides two templates to help you get started quickly. Both templates include all required frontmatter fields and body sections.
+
+## Full Template
+
+The full template includes guidance text in each section, explaining what to write and how to structure the content. Use this template when you are new to Structured MADR or want reminders about what each section should contain.
+
+**File:** [`templates/template.md`](https://github.com/zircote/structured-madr/blob/main/templates/template.md)
+
+### Frontmatter
+
+```yaml
+---
+title: "{TITLE}"
+description: "{DESCRIPTION}"
+type: adr
+category: {CATEGORY}
+tags:
+  - {tag}
+status: proposed
+created: {DATE}
+updated: {DATE}
+author: {AUTHOR}
+project: {PROJECT}
+technologies:
+  - {technology}
+audience:
+  - developers
+related:
+  - {related_adr}
+---
+```
+
+### Sections Included
+
+The full template provides placeholder text and guidance for every section:
+
+1. **Status** -- Current decision status
+2. **Context** -- Background, problem statement, and current limitations
+3. **Decision Drivers** -- Primary and secondary factors influencing the decision
+4. **Considered Options** -- Each option with description, characteristics, advantages, disadvantages, and a three-dimension risk assessment (Technical, Schedule, Ecosystem)
+5. **Decision** -- The chosen approach with implementation details
+6. **Consequences** -- Categorized as positive, negative, and neutral
+7. **Decision Outcome** -- Summary with mitigations for negative consequences
+8. **Related Decisions** -- Links to related ADRs
+9. **Links** -- External resources
+10. **More Information** -- Date, source, references
+11. **Audit** -- Compliance tracking with findings table
+
+### Risk Assessment Format
+
+Each considered option includes a structured risk assessment:
+
+```markdown
+**Risk Assessment**:
+- **Technical Risk**: {Low|Medium|High}. {Explanation}
+- **Schedule Risk**: {Low|Medium|High}. {Explanation}
+- **Ecosystem Risk**: {Low|Medium|High}. {Explanation}
+```
+
+## Bare Template
+
+The bare template contains only the structural skeleton -- section headings and empty fields -- without guidance text. Use this template when you are comfortable with the format and want a clean starting point.
+
+**File:** [`templates/template-bare.md`](https://github.com/zircote/structured-madr/blob/main/templates/template-bare.md)
+
+### What Is Included
+
+- Empty YAML frontmatter with all required fields
+- All section headings in the correct order
+- Empty risk assessment structure for two options
+- Empty audit findings table
+
+### What Is Omitted
+
+- Guidance text explaining each section
+- Example values and placeholder descriptions
+- Instructional comments
+
+## Downloading Templates
+
+### Using curl
+
+```bash
+# Full template
+curl -O https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template.md
+
+# Bare template
+curl -O https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template-bare.md
+```
+
+### Using wget
+
+```bash
+wget https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template.md
+wget https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template-bare.md
+```
+
+### Renaming for Your Project
+
+After downloading, rename the file to follow the ADR naming convention:
+
+```bash
+mv template.md docs/decisions/0001-your-decision-title.md
+```
+
+## Choosing a Template
+
+| Scenario | Recommended Template |
+|----------|---------------------|
+| First time using Structured MADR | Full template |
+| Experienced with the format | Bare template |
+| Onboarding new team members | Full template |
+| Rapid ADR creation | Bare template |
+| Learning what each section means | Full template |

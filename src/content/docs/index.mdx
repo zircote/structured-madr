@@ -1,0 +1,59 @@
+---
+title: "Structured MADR"
+description: "Machine-readable Architectural Decision Records for the AI era"
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Structured MADR is an extension of [MADR](https://adr.github.io/madr/) (Markdown Architectural Decision Records) that adds YAML frontmatter for machine-readable metadata, comprehensive option analysis with risk assessments, and required audit sections for compliance tracking.
+
+## Why Structured MADR?
+
+Traditional ADR formats were designed for human readers. While they capture decisions effectively, they lack machine-readable metadata for programmatic access, structured risk assessment for option evaluation, audit trails for compliance verification, and explicit relationships between decisions.
+
+Structured MADR addresses these gaps while remaining fully human-readable and compatible with existing ADR workflows.
+
+## Key Features
+
+<CardGrid>
+  <Card title="YAML Frontmatter">
+    Machine-parseable metadata for tooling integration. Filter, search, and query your decisions programmatically.
+  </Card>
+  <Card title="Risk Assessment">
+    Evaluate technical, schedule, and ecosystem risk for every considered option with a structured three-dimension model.
+  </Card>
+  <Card title="Audit Trail">
+    Built-in compliance tracking with findings tables. Meet SOC2, HIPAA, and ISO 27001 requirements.
+  </Card>
+  <Card title="AI-Ready">
+    Structured metadata enables AI tools like Claude Code, GitHub Copilot, and Cursor to filter, understand, and surface relevant decisions.
+  </Card>
+</CardGrid>
+
+## Quick Links
+
+<CardGrid>
+  <LinkCard title="Getting Started" href="/tutorials/getting-started/" description="Create your first Structured MADR in under 5 minutes" />
+  <LinkCard title="Schema Reference" href="/reference/schema/" description="Complete JSON Schema field reference" />
+  <LinkCard title="GitHub Action" href="/reference/github-action/" description="Automated CI/CD validation for your ADRs" />
+  <LinkCard title="Templates" href="/reference/templates/" description="Full and bare templates ready to use" />
+  <LinkCard title="Why Structured MADR" href="/explanation/why-structured-madr/" description="Motivation and ideal use cases" />
+  <LinkCard title="Format Comparison" href="/explanation/format-comparison/" description="How Structured MADR compares to other ADR formats" />
+</CardGrid>
+
+## At a Glance
+
+| Feature | Description |
+|---------|-------------|
+| **YAML Frontmatter** | Machine-parseable metadata for tooling integration |
+| **Hierarchical Drivers** | Primary and secondary decision drivers |
+| **Risk Assessment** | Technical, schedule, and ecosystem risk per option |
+| **Split Consequences** | Positive, negative, and neutral outcomes |
+| **Audit Section** | Built-in compliance tracking with findings tables |
+| **Explicit Relationships** | Typed links between related decisions |
+
+## Current Version
+
+- **Specification:** 1.0.0
+- **Schema:** 1.0.0
+- **Project:** 1.1.0

@@ -1,0 +1,117 @@
+---
+title: "Schema"
+description: "JSON Schema reference for Structured MADR frontmatter validation"
+---
+
+Structured MADR uses a [JSON Schema (Draft-07)](http://json-schema.org/draft-07/schema#) to validate the YAML frontmatter in every ADR. The schema enforces required fields, value constraints, and format rules.
+
+## Required Fields
+
+Every Structured MADR document must include the following fields in its YAML frontmatter:
+
+| Field | Type | Constraints | Description |
+|-------|------|-------------|-------------|
+| `title` | `string` | 1-100 characters | Short descriptive title for the decision |
+| `description` | `string` | 1-300 characters | One-sentence summary of the decision |
+| `type` | `string` | Must be `"adr"` | Document type identifier |
+| `category` | `string` | Min 1 character | Decision category (e.g., `architecture`, `security`, `api`) |
+| `tags` | `array` | Min 1 item, unique | Keywords for categorization and search |
+| `status` | `enum` | See status values | Current status of the decision |
+| `created` | `string` | ISO 8601 date | Creation date (`YYYY-MM-DD`) |
+| `updated` | `string` | ISO 8601 date | Last update date (`YYYY-MM-DD`) |
+| `author` | `string` | Min 1 character | Decision author or team |
+| `project` | `string` | Min 1 character | Project identifier |
+
+## Optional Fields
+
+| Field | Type | Constraints | Description |
+|-------|------|-------------|-------------|
+| `technologies` | `array` | Unique items | Technologies referenced or affected by this decision |
+| `audience` | `array` | Unique items | Intended readers of this ADR |
+| `related` | `array` | Unique, pattern `^[a-zA-Z0-9_-]+\.md$` | Filenames of related ADRs |
+
+## Status Values
+
+The `status` field must be one of:
+
+| Status | Description | Transitions To |
+|--------|-------------|----------------|
+| `proposed` | Under consideration | `accepted`, `superseded` |
+| `accepted` | Approved and active | `deprecated`, `superseded` |
+| `deprecated` | No longer recommended | `superseded` |
+| `superseded` | Replaced by another ADR | (terminal) |
+
+## Tag Format
+
+Tags must match the pattern `^[a-z0-9][a-z0-9-]*[a-z0-9]$` or be a single lowercase alphanumeric character. This enforces lowercase, hyphen-separated identifiers (e.g., `api-design`, `postgresql`, `ci-cd`).
+
+## Extension Fields
+
+The schema supports custom extension fields prefixed with `x-`. This allows teams to add project-specific metadata without violating validation:
+
+```yaml
+---
+title: "My Decision"
+x-team: platform
+x-priority: high
+---
+```
+
+## Example Frontmatter
+
+```yaml
+---
+title: "Use PostgreSQL for Primary Storage"
+description: "Decision to adopt PostgreSQL as the primary database"
+type: adr
+category: architecture
+tags:
+  - database
+  - postgresql
+  - storage
+status: accepted
+created: 2025-01-15
+updated: 2025-01-20
+author: Architecture Team
+project: my-application
+technologies:
+  - postgresql
+  - rust
+audience:
+  - developers
+  - architects
+related:
+  - adr_0001.md
+---
+```
+
+## Using the Schema
+
+### With ajv-cli
+
+```bash
+npx ajv validate -s schemas/structured-madr.schema.json -d your-adr.md
+```
+
+### With check-jsonschema
+
+```bash
+check-jsonschema --schemafile schemas/structured-madr.schema.json your-adr.md
+```
+
+### Programmatically
+
+```javascript
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
+import schema from "./schemas/structured-madr.schema.json";
+
+const ajv = new Ajv();
+addFormats(ajv);
+const validate = ajv.compile(schema);
+const valid = validate(frontmatterObject);
+```
+
+## Raw Schema
+
+The full JSON Schema file is available at [`schemas/structured-madr.schema.json`](https://github.com/zircote/structured-madr/blob/main/schemas/structured-madr.schema.json) in the repository.

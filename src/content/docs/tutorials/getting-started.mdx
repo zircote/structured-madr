@@ -1,0 +1,145 @@
+---
+title: "Getting Started"
+description: "Install and configure Structured MADR for your project in minutes."
+---
+
+Structured MADR extends the popular [MADR](https://adr.github.io/madr/) format with YAML frontmatter,
+risk assessments, and audit trails. This guide walks you through adopting it in an existing project.
+
+## Prerequisites
+
+- A project repository (Git recommended)
+- A directory for architectural decisions (e.g., `docs/decisions/`)
+
+## Step 1: Get the Template
+
+Download the Structured MADR template directly into your project:
+
+```bash
+mkdir -p docs/decisions
+curl -o docs/decisions/0001-your-decision.md \
+  https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template.md
+```
+
+Alternatively, if you prefer a minimal starting point, use the bare template:
+
+```bash
+curl -o docs/decisions/0001-your-decision.md \
+  https://raw.githubusercontent.com/zircote/structured-madr/main/templates/template-bare.md
+```
+
+The full template includes placeholder text explaining each section. The bare template provides
+just the section headings so you can fill them in from scratch.
+
+## Step 2: Fill in the Frontmatter
+
+Every Structured MADR document starts with a YAML frontmatter block. This metadata is what makes
+your ADRs machine-readable. Open the file and replace the placeholders:
+
+```yaml
+---
+title: "Use PostgreSQL for Primary Storage"
+description: "Decision to adopt PostgreSQL as the application database"
+type: adr
+category: architecture
+tags:
+  - database
+  - postgresql
+status: proposed
+created: 2025-01-15
+updated: 2025-01-15
+author: Architecture Team
+project: my-application
+technologies:
+  - postgresql
+audience:
+  - developers
+  - architects
+---
+```
+
+### Required fields
+
+| Field         | Purpose                                      |
+|---------------|----------------------------------------------|
+| `title`       | Short descriptive title for the decision      |
+| `description` | One-sentence summary                          |
+| `type`        | Always `"adr"`                                |
+| `category`    | Decision category (e.g., architecture, security) |
+| `tags`        | Keywords for filtering and search             |
+| `status`      | One of: `proposed`, `accepted`, `deprecated`, `superseded` |
+| `created`     | Creation date in `YYYY-MM-DD` format          |
+| `updated`     | Last update date in `YYYY-MM-DD` format       |
+| `author`      | Person or team making the decision            |
+| `project`     | Project identifier                            |
+
+### Optional fields
+
+| Field          | Purpose                                    |
+|----------------|--------------------------------------------|
+| `technologies` | Technologies involved in the decision       |
+| `audience`     | Who should read this ADR                    |
+| `related`      | Filenames of related ADRs                   |
+
+## Step 3: Document Your Decision
+
+Follow the template sections in order. Each section serves a specific purpose:
+
+1. **Status** -- Mirror the frontmatter status value in prose.
+2. **Context** -- Describe the background, problem statement, and current limitations.
+3. **Decision Drivers** -- List primary and secondary factors influencing the decision.
+4. **Considered Options** -- Document each option with technical characteristics, advantages, disadvantages, and a risk assessment.
+5. **Decision** -- State the chosen approach clearly and directly.
+6. **Consequences** -- Split into positive, negative, and neutral outcomes.
+7. **Decision Outcome** -- Summarize results and list mitigations for negative consequences.
+8. **Related Decisions** -- Link to other ADRs in your project.
+9. **Links** -- External resources and references.
+
+## Step 4: Add the Audit Trail
+
+The audit section is what sets Structured MADR apart for compliance-driven teams.
+After implementation, add an audit entry:
+
+```markdown
+## Audit
+
+### 2025-02-01
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding               | Files              | Lines    | Assessment |
+|-----------------------|--------------------|----------|------------|
+| PostgreSQL configured | `src/db/config.rs` | L15-L45  | compliant  |
+
+**Summary:** Implementation follows ADR specifications.
+
+**Action Required:** None
+```
+
+Each audit entry records:
+- The date of the audit
+- Whether the implementation is compliant
+- Specific findings mapped to files and line numbers
+- Any required follow-up actions
+
+## Step 5: Number Your ADRs
+
+Use a consistent numbering scheme. The recommended pattern is:
+
+```
+docs/decisions/
+  0001-use-postgresql-for-storage.md
+  0002-adopt-rest-api-pattern.md
+  0003-switch-to-event-sourcing.md
+```
+
+Use zero-padded four-digit numbers to keep files sorted correctly.
+
+## Next Steps
+
+- [Write your first ADR](/tutorials/first-adr) with a step-by-step walkthrough
+- [Set up CI validation](/guides/ci-validation) to catch formatting errors automatically
+- [Validate locally](/guides/local-validation) before pushing changes
+- [Integrate with AI tools](/guides/ai-integration) to get the most from your structured metadata

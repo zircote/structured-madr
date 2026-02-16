@@ -1,0 +1,81 @@
+---
+title: "Format Comparison"
+description: "How Structured MADR compares to other ADR formats"
+---
+
+Several ADR formats exist, each designed for different contexts and levels of formality. This page compares Structured MADR with the most widely used alternatives to help you choose the right format.
+
+## Comparison Table
+
+| Aspect | Structured MADR | MADR | Nygard | Y-Statement | Tyree-Akerman |
+|--------|-----------------|------|--------|-------------|---------------|
+| Sections | 12+ | 10 | 5 | 1 | 15+ |
+| Frontmatter | Required YAML | None | None | None | None |
+| Options Detail | Narrative + Risk | Pros/Cons | Implicit | Single | Detailed |
+| Consequences | Pos/Neg/Neutral | Single list | Prose | Implicit | Impact analysis |
+| Audit Trail | Required | None | None | None | None |
+| Machine-Readable | Full metadata | Limited | Limited | Limited | Limited |
+
+## Format Profiles
+
+### Nygard (2011)
+
+Michael Nygard's [original ADR format](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) is the simplest and most widely recognized. It uses five sections: Title, Status, Context, Decision, and Consequences.
+
+**Strengths:** Minimal ceremony. Easy to adopt. Well-known in the industry. Can be written in minutes.
+
+**Limitations:** No structured metadata. No option comparison. No risk assessment. Consequences are a single undifferentiated list.
+
+**Best for:** Teams that want lightweight decision capture without process overhead. Quick decisions where the context is well-understood and the options are obvious.
+
+### Y-Statement
+
+The [Y-Statement format](https://medium.com/olzzio/y-statements-10eb07b5a177) captures a decision in a single structured sentence: "In the context of [situation], facing [concern], we decided [option], to achieve [quality], accepting [downside]."
+
+**Strengths:** Extremely concise. Forces clarity. Good for decision logs and summaries.
+
+**Limitations:** No room for detailed analysis. No option comparison. No audit capability. Insufficient for complex decisions with multiple trade-offs.
+
+**Best for:** Decision registers, summary documents, and situations where you need a quick record without detailed analysis.
+
+### MADR (Markdown ADR)
+
+[MADR](https://adr.github.io/madr/) extends Nygard's format with structured sections for decision drivers, considered options with pros and cons, and links. It is the direct ancestor of Structured MADR.
+
+**Strengths:** Good balance of structure and simplicity. Active community. Well-documented. Includes option analysis with pros and cons.
+
+**Limitations:** No machine-readable frontmatter. No risk assessment. No audit trail. Consequences are a single list without categorization.
+
+**Best for:** Teams that want more structure than Nygard but do not need compliance tracking or machine-readable metadata.
+
+### Tyree-Akerman
+
+The [Tyree-Akerman format](https://personal.utdallas.edu/~chung/SA/zz-Misc-from-Mail/09.02.02/Tyree05.pdf) is the most comprehensive traditional format, with 15+ sections covering assumptions, constraints, implications, related decisions, and notes.
+
+**Strengths:** Extremely thorough. Covers assumptions and constraints explicitly. Good for enterprise governance.
+
+**Limitations:** Heavy overhead. No machine-readable metadata. Can feel bureaucratic for smaller decisions. Rarely used outside enterprise contexts.
+
+**Best for:** Large enterprise environments with formal governance processes where comprehensive documentation is required for every decision.
+
+### Structured MADR
+
+Structured MADR builds on MADR by adding YAML frontmatter, three-dimension risk assessment, categorized consequences, and a required audit section.
+
+**Strengths:** Machine-readable metadata for tooling and AI integration. Structured risk evaluation. Built-in compliance tracking. JSON Schema validation.
+
+**Limitations:** More sections than MADR or Nygard. Requires YAML frontmatter knowledge. Audit section adds maintenance overhead.
+
+**Best for:** Compliance-driven projects, AI-assisted development, large codebases, and long-lived projects where structured metadata and audit trails provide value.
+
+## Choosing a Format
+
+| Your Situation | Recommended Format |
+|----------------|-------------------|
+| Quick decisions, small team | Nygard |
+| Decision summary or register | Y-Statement |
+| Moderate structure, no compliance needs | MADR |
+| Enterprise governance, formal process | Tyree-Akerman |
+| Compliance, AI tooling, large codebase | Structured MADR |
+
+If you are unsure, start with MADR. You can migrate to Structured MADR later by adding frontmatter and audit sections to existing documents -- the section structure is intentionally compatible.

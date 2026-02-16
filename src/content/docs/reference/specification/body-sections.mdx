@@ -1,0 +1,269 @@
+---
+title: "Body Sections"
+description: "Required body sections including title, status, context, decision drivers, options, consequences, and audit."
+---
+
+# 4. Body Sections
+
+## 4.1 Title
+
+The document title MUST be an H1 heading in the format:
+
+```markdown
+# ADR-{NUMBER}: {TITLE}
+```
+
+Where:
+- `{NUMBER}` is a unique identifier (typically zero-padded, e.g., `0001`)
+- `{TITLE}` matches the frontmatter `title` field
+
+## 4.2 Status Section
+
+The status section MUST be an H2 heading containing the current status.
+
+```markdown
+## Status
+
+Accepted
+```
+
+If the ADR supersedes another, this SHOULD be noted:
+
+```markdown
+## Status
+
+Accepted
+
+Supersedes ADR-0003
+```
+
+## 4.3 Context Section
+
+The context section MUST be an H2 heading with the following subsections:
+
+### 4.3.1 Background and Problem Statement
+
+An H3 subsection describing the situation requiring a decision.
+
+```markdown
+## Context
+
+### Background and Problem Statement
+
+{Description of the context and the problem being solved}
+```
+
+### 4.3.2 Current Limitations (Optional)
+
+An H3 subsection listing limitations of the current approach.
+
+```markdown
+### Current Limitations
+
+{Numbered or bulleted list of limitations}
+```
+
+## 4.4 Decision Drivers Section
+
+The decision drivers section MUST be an H2 heading with hierarchical subsections:
+
+### 4.4.1 Primary Decision Drivers
+
+An H3 subsection listing the most important factors.
+
+```markdown
+## Decision Drivers
+
+### Primary Decision Drivers
+
+1. **{Driver Name}**: {Explanation}
+2. **{Driver Name}**: {Explanation}
+```
+
+### 4.4.2 Secondary Decision Drivers
+
+An H3 subsection listing influential but non-decisive factors.
+
+```markdown
+### Secondary Decision Drivers
+
+1. **{Driver Name}**: {Explanation}
+```
+
+## 4.5 Considered Options Section
+
+The options section MUST be an H2 heading with an H3 subsection for each option.
+
+### 4.5.1 Option Structure
+
+Each option MUST include:
+
+1. **Description** - Brief overview
+2. **Technical Characteristics** - Key technical attributes
+3. **Advantages** - Benefits of this option
+4. **Disadvantages** - Drawbacks of this option
+
+Each option SHOULD include:
+
+5. **Risk Assessment** - Technical, schedule, and ecosystem risk ratings
+
+Each option MAY include:
+
+6. **Disqualifying Factor** - Reason for rejection (if applicable)
+
+```markdown
+## Considered Options
+
+### Option 1: {Title}
+
+**Description**: {Brief description}
+
+**Technical Characteristics**:
+- {Characteristic 1}
+- {Characteristic 2}
+
+**Advantages**:
+- {Advantage 1}
+- {Advantage 2}
+
+**Disadvantages**:
+- {Disadvantage 1}
+- {Disadvantage 2}
+
+**Risk Assessment**:
+- **Technical Risk**: {Low|Medium|High}. {Explanation}
+- **Schedule Risk**: {Low|Medium|High}. {Explanation}
+- **Ecosystem Risk**: {Low|Medium|High}. {Explanation}
+```
+
+## 4.6 Decision Section
+
+The decision section MUST be an H2 heading stating the chosen option and implementation details.
+
+```markdown
+## Decision
+
+{Clear statement of the decision}
+
+The implementation will use:
+- **{Component}** for {purpose}
+- **{Component}** for {purpose}
+```
+
+## 4.7 Consequences Section
+
+The consequences section MUST be an H2 heading with three subsections:
+
+```markdown
+## Consequences
+
+### Positive
+
+1. **{Title}**: {Description}
+
+### Negative
+
+1. **{Title}**: {Description}
+
+### Neutral
+
+1. **{Title}**: {Description}
+```
+
+## 4.8 Decision Outcome Section
+
+The outcome section MUST be an H2 heading summarizing results and mitigations.
+
+```markdown
+## Decision Outcome
+
+{Summary of how objectives are achieved}
+
+Mitigations:
+- {Mitigation for negative consequence}
+```
+
+## 4.9 Related Decisions Section
+
+The related decisions section MUST be an H2 heading linking to related ADRs.
+
+```markdown
+## Related Decisions
+
+- [ADR-{NUMBER}: {Title}]({filename}) - {Relationship description}
+```
+
+## 4.10 Links Section
+
+The links section MUST be an H2 heading with external resources.
+
+```markdown
+## Links
+
+- [{Resource Name}]({URL}) - {Description}
+```
+
+## 4.11 More Information Section
+
+The more information section MUST be an H2 heading with metadata.
+
+```markdown
+## More Information
+
+- **Date:** {DATE}
+- **Source:** {Reference}
+- **Related ADRs:** {List}
+```
+
+## 4.12 Audit Section
+
+The audit section MUST be an H2 heading and MUST be present in all Structured MADR documents.
+
+### 4.12.1 Audit Entry Structure
+
+Each audit entry MUST be an H3 heading with the audit date and contain:
+
+1. **Status** - Audit result
+2. **Findings** - Table of specific findings
+3. **Summary** - Brief summary
+4. **Action Required** - Required remediation
+
+```markdown
+## Audit
+
+### {YYYY-MM-DD}
+
+**Status:** {Pending|Compliant|Non-Compliant|Partial}
+
+**Findings:**
+
+| Finding | Files | Lines | Assessment |
+|---------|-------|-------|------------|
+| {Description} | `{file}` | L{n}-L{m} | {compliant|non-compliant|partial} |
+
+**Summary:** {Brief summary}
+
+**Action Required:** {None|Description of required actions}
+```
+
+### 4.12.2 Initial Audit Entry
+
+New ADRs SHOULD have an initial audit entry with status `Pending`:
+
+```markdown
+## Audit
+
+### {DATE}
+
+**Status:** Pending
+
+**Findings:**
+
+| Finding | Files | Lines | Assessment |
+|---------|-------|-------|------------|
+| Awaiting implementation | - | - | pending |
+
+**Summary:** ADR created, awaiting implementation.
+
+**Action Required:** Implement decision and audit
+```
