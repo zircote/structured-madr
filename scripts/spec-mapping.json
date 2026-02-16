@@ -1,0 +1,62 @@
+{
+  "sourceSpec": "SPECIFICATION.md",
+  "outputDir": "src/content/docs/reference/specification",
+  "pages": [
+    {
+      "output": "overview.mdx",
+      "title": "Overview",
+      "description": "Introduction to the Structured MADR specification, purpose, design goals, and document structure.",
+      "sections": [
+        "Abstract",
+        "Status of This Document",
+        "1. Introduction",
+        "2. Document Structure"
+      ],
+      "keepPreamble": true
+    },
+    {
+      "output": "frontmatter.mdx",
+      "title": "YAML Frontmatter",
+      "description": "Required and optional YAML frontmatter fields for Structured MADR documents.",
+      "sections": ["3. YAML Frontmatter"]
+    },
+    {
+      "output": "body-sections.mdx",
+      "title": "Body Sections",
+      "description": "Required body sections including title, status, context, decision drivers, options, consequences, and audit.",
+      "sections": ["4. Body Sections"]
+    },
+    {
+      "output": "file-naming.mdx",
+      "title": "File Naming & Validation",
+      "description": "File naming conventions and validation requirements for Structured MADR documents.",
+      "sections": ["5. File Naming", "6. Validation"]
+    },
+    {
+      "output": "extensions.mdx",
+      "title": "Extensions & Appendices",
+      "description": "Custom extensions, MIME type, security considerations, and appendices for the Structured MADR specification.",
+      "sections": [
+        "7. Extensions",
+        "8. MIME Type",
+        "9. Security Considerations",
+        "Appendix A: Complete Example",
+        "Appendix B: Changelog"
+      ]
+    }
+  ],
+  "crossReferences": {
+    "#yaml-frontmatter": "/reference/specification/frontmatter#yaml-frontmatter",
+    "#3-yaml-frontmatter": "/reference/specification/frontmatter#yaml-frontmatter",
+    "#body-sections": "/reference/specification/body-sections#body-sections",
+    "#4-body-sections": "/reference/specification/body-sections#body-sections",
+    "#file-naming": "/reference/specification/file-naming#file-naming",
+    "#5-file-naming": "/reference/specification/file-naming#file-naming",
+    "#validation": "/reference/specification/file-naming#validation",
+    "#6-validation": "/reference/specification/file-naming#validation",
+    "#extensions": "/reference/specification/extensions#extensions",
+    "#7-extensions": "/reference/specification/extensions#extensions",
+    "#audit-section": "/reference/specification/body-sections#audit-section",
+    "#security-considerations": "/reference/specification/extensions#security-considerations"
+  }
+}
