@@ -28,7 +28,7 @@ jobs:
 
       - name: Validate project ADRs
         # zircote/structured-madr@v1.1.0
-        uses: zircote/structured-madr@427992745ad30e973289c6025f101181d968e50a
+        uses: zircote/structured-madr@f8331ed88f0334a07ac939efed45dbd00d926a7e
         with:
           path: docs/decisions
           strict: 'false'
@@ -42,7 +42,7 @@ jobs:
 
       - name: Validate example ADRs
         # zircote/structured-madr@v1.1.0
-        uses: zircote/structured-madr@427992745ad30e973289c6025f101181d968e50a
+        uses: zircote/structured-madr@f8331ed88f0334a07ac939efed45dbd00d926a7e
         with:
           path: examples
           strict: 'false'
