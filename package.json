@@ -38,7 +38,7 @@
     "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "astro": "^5.17.2",
+    "astro": "^5.18.0",
     "@astrojs/starlight": "^0.37.6",
     "eslint": "^9.0.0"
   },
