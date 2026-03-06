@@ -1,0 +1,92 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Structured MADR"
+abstract: "Machine-readable Architectural Decision Records with YAML frontmatter, structured risk assessment, and compliance audit sections. An extension of MADR for the AI era."
+version: "1.1.0"
+date-released: "2026-03-06"
+license: MIT
+url: "https://github.com/zircote/structured-madr"
+repository-code: "https://github.com/zircote/structured-madr"
+authors:
+  - family-names: "Allen"
+    given-names: "Robert"
+    email: "zircote@gmail.com"
+    orcid: "https://orcid.org/0009-0007-9691-004X"
+identifiers:
+  - type: url
+    value: "https://github.com/zircote/structured-madr"
+    description: "GitHub repository"
+keywords:
+  - "adr"
+  - "architecture"
+  - "decision-records"
+  - "madr"
+  - "validation"
+  - "github-action"
+preferred-citation:
+  type: software
+  title: "Structured MADR"
+  authors:
+    - family-names: "Allen"
+      given-names: "Robert"
+      orcid: "https://orcid.org/0009-0007-9691-004X"
+  version: "1.1.0"
+  date-released: "2026-03-06"
+  license: MIT
+  url: "https://github.com/zircote/structured-madr"
+  repository-code: "https://github.com/zircote/structured-madr"
+references:
+  - type: software
+    title: "Markdown Architectural Decision Records (MADR)"
+    authors:
+      - family-names: "Kopp"
+        given-names: "Oliver"
+      - family-names: "Armbruster"
+        given-names: "Anita"
+      - family-names: "Zimmermann"
+        given-names: "Olaf"
+    url: "https://adr.github.io/madr/"
+    repository-code: "https://github.com/adr/madr"
+    license: MIT
+    abstract: "Markdown Architectural Decision Records (MADR) - decisions that matter."
+  - type: conference-paper
+    title: "Markdown Architectural Decision Records: Format and Tool Support"
+    authors:
+      - family-names: "Kopp"
+        given-names: "Oliver"
+      - family-names: "Armbruster"
+        given-names: "Anita"
+      - family-names: "Zimmermann"
+        given-names: "Olaf"
+    collection-title: "ZEUS"
+    year: 2018
+  - type: blog
+    title: "Documenting Architecture Decisions"
+    authors:
+      - family-names: "Nygard"
+        given-names: "Michael"
+    url: "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions"
+    year: 2011
+    abstract: "The original Architectural Decision Records format proposing five sections: Title, Status, Context, Decision, and Consequences."
+  - type: blog
+    title: "Y-Statements - A Light Template for Architectural Decision Capturing"
+    authors:
+      - family-names: "Zimmermann"
+        given-names: "Olaf"
+    url: "https://medium.com/olzzio/y-statements-10eb07b5a177"
+    abstract: "A single-sentence format for capturing architectural decisions: In the context of [situation], facing [concern], we decided [option], to achieve [quality], accepting [downside]."
+  - type: conference-paper
+    title: "Architecture Decisions: Demystifying Architecture"
+    authors:
+      - family-names: "Tyree"
+        given-names: "Jeff"
+      - family-names: "Akerman"
+        given-names: "Art"
+    collection-title: "IEEE Software"
+    year: 2005
+    volume: 22
+    issue: 2
+    start: 19
+    end: 27
+    abstract: "A comprehensive ADR format with 15+ sections covering assumptions, constraints, implications, and related decisions for enterprise governance."
