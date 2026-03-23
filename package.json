@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "astro": "^6.0.8",
-    "@astrojs/starlight": "^0.38.1",
+    "@astrojs/starlight": "^0.38.2",
     "eslint": "^10.1.0"
   },
   "engines": {
