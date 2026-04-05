@@ -17,7 +17,7 @@ import { parse as parseYaml } from 'yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Required body sections in order
+// Default body sections — overridable via schema.body
 const REQUIRED_SECTIONS = [
   'Status',
   'Context',
@@ -32,12 +32,21 @@ const REQUIRED_SECTIONS = [
   'Audit',
 ];
 
-// Required subsections within main sections
+// Default subsections — overridable via schema.body
 const REQUIRED_SUBSECTIONS = {
   Context: ['Background and Problem Statement'],
   'Decision Drivers': ['Primary Decision Drivers', 'Secondary Decision Drivers'],
   Consequences: ['Positive', 'Negative', 'Neutral'],
 };
+
+// Optional sections — populated from schema.body.optional_sections
+let OPTIONAL_SECTIONS = new Set();
+
+// Title pattern — overridable from schema.body.title_pattern
+let TITLE_PATTERN = /^ADR-(\d+):\s*(.+)$/;
+
+// Whether to require ### headings under Considered Options
+let REQUIRE_OPTION_HEADINGS = true;
 
 // Valid status values for frontmatter
 const VALID_STATUSES = ['proposed', 'accepted', 'deprecated', 'superseded'];
@@ -115,9 +124,12 @@ function parseFrontmatter(content) {
 function extractHeadings(body, startLine = 1) {
   const lines = body.split('\n');
   const headings = [];
+  let inCodeFence = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    if (line.startsWith('```')) { inCodeFence = !inCodeFence; continue; }
+    if (inCodeFence) continue;
     const match = line.match(/^(#{1,6})\s+(.+)$/);
     if (match) {
       headings.push({
@@ -221,10 +233,10 @@ function validateTitle(headings, frontmatter, result) {
     );
   }
 
-  const titleMatch = h1Headings[0].text.match(/^ADR-(\d+):\s*(.+)$/);
+  const titleMatch = h1Headings[0].text.match(TITLE_PATTERN);
   if (!titleMatch) {
     result.addError(
-      `H1 title does not match required format. Expected: # ADR-{NUMBER}: {TITLE}`,
+      `H1 title does not match required pattern: ${TITLE_PATTERN}`,
       h1Headings[0].line
     );
     return;
@@ -232,7 +244,7 @@ function validateTitle(headings, frontmatter, result) {
 
   // Check title matches frontmatter
   if (frontmatter?.title) {
-    const bodyTitle = titleMatch[2].trim();
+    const bodyTitle = (titleMatch[2] ?? titleMatch[0]).trim();
     if (
       bodyTitle.toLowerCase() !== frontmatter.title.toLowerCase() &&
       !bodyTitle.toLowerCase().includes(frontmatter.title.toLowerCase())
@@ -275,6 +287,7 @@ function validateSections(headings, result) {
     const foundIndex = h2Texts.findIndex((t) => matchSection(t, section));
 
     if (foundIndex === -1) {
+      if (OPTIONAL_SECTIONS.has(section.toLowerCase())) continue;
       result.addError(`Missing required section: ## ${section}`);
     } else {
       // Check order
@@ -489,6 +502,18 @@ function validateOptions(content, headings, result) {
 /**
  * Validate a single ADR file.
  */
+function resolveBodyConfig(schema) {
+  const body = schema?.body;
+  if (!body) return {};
+  return {
+    sections: [...(body.sections ?? []), ...(body.optional_sections ?? [])],
+    optional: new Set((body.optional_sections ?? []).map((s) => s.toLowerCase())),
+    subsections: body.subsections ?? null,
+    titlePattern: body.title_pattern ? new RegExp(body.title_pattern) : null,
+    requireOptionHeadings: body.require_option_headings ?? true,
+  };
+}
+
 function validateFile(filePath, schema) {
   const result = new ValidationResult(filePath);
 
@@ -531,7 +556,9 @@ function validateFile(filePath, schema) {
   validateSections(headings, result);
   validateSubsections(headings, result);
   validateAuditSection(body, headings, result);
-  validateOptions(content, headings, result);
+  if (REQUIRE_OPTION_HEADINGS) {
+    validateOptions(content, headings, result);
+  }
 
   return result;
 }
@@ -571,6 +598,28 @@ async function main() {
       schema = JSON.parse(readFileSync(schemaPath, 'utf-8'));
     } catch (error) {
       console.log(`::warning::Failed to load schema: ${error.message}`);
+    }
+  }
+
+  // Apply body config from schema if present
+  if (schema?.body) {
+    const b = schema.body;
+    if (b.sections || b.optional_sections) {
+      REQUIRED_SECTIONS.length = 0;
+      REQUIRED_SECTIONS.push(...(b.sections ?? []));
+    }
+    if (b.title_pattern) {
+      TITLE_PATTERN = new RegExp(b.title_pattern);
+    }
+    if (b.optional_sections) {
+      OPTIONAL_SECTIONS = new Set(b.optional_sections.map((s) => s.toLowerCase()));
+    }
+    if (b.subsections) {
+      Object.keys(REQUIRED_SUBSECTIONS).forEach((k) => delete REQUIRED_SUBSECTIONS[k]);
+      Object.assign(REQUIRED_SUBSECTIONS, b.subsections);
+    }
+    if (b.require_option_headings === false) {
+      REQUIRE_OPTION_HEADINGS = false;
     }
   }
 
