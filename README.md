@@ -7,7 +7,7 @@ Structured MADR is an extension of [MADR](https://adr.github.io/madr/) (Markdown
 [![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Specification](https://img.shields.io/badge/spec-1.0.0-purple.svg)](SPECIFICATION.md)
-[![Validate ADRs](https://github.com/modeled-information-format/structured-madr/actions/workflows/validate-adrs.yml/badge.svg)](https://github.com/modeled-information-format/structured-madr/actions/workflows/validate-adrs.yml)
+[![CI](https://github.com/modeled-information-format/structured-madr/actions/workflows/ci.yml/badge.svg)](https://github.com/modeled-information-format/structured-madr/actions/workflows/ci.yml)
 
 ## Why Structured MADR?
 
