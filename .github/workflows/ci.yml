@@ -45,6 +45,7 @@ jobs:
       security-events: write
       contents: read
       actions: read
+      packages: read
     uses: modeled-information-format/.github/.github/workflows/reusable-sast-codeql.yml@a9ea785d2f7b9e8d70c5ce763dde2cd74af28bd1
     with:
       languages: 'javascript-typescript,actions'
