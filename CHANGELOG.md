@@ -13,8 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   user-selected level (`.github/config.yml` `mifConformanceLevel: 1|2|3`,
   default 2). Markdown stays canonical; a MIF JSON-LD object is derived from
   frontmatter + body and validated against per-level profiles.
-  - Self-contained plugin under `.github/` (vendored + checksum-pinned MIF
-    schemas, config, projector, validator, ADR-typing ontology, skill/agent/commands/hook).
+  - Self-contained Claude Code plugin homed at `.github/` (plugin root with
+    `.claude-plugin/plugin.json`, `commands/`, `agents/`, `skills/`, `hooks/`, plus
+    vendored + checksum-pinned MIF schemas, config, projector, validator, ADR-typing ontology).
+  - Installable: the repository is a plugin marketplace (`.claude-plugin/marketplace.json`,
+    `source: ./.github`); `.claude/settings.json` registers it and enables the plugin at
+    project scope, so `/plugin install structured-madr-mif@structured-madr` works.
   - `npm run validate:mif`; composite action gains `mode: mif` for downstream consumers.
   - CI gates: `mif-vendor-check` (schema drift) and dogfooded `validate-mif`.
   - ADR-0003 records the decision and is itself MIF-conformant (dogfooded).

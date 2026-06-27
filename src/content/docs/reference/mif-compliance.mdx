@@ -8,8 +8,26 @@ level you select. The markdown stays canonical; a MIF JSON-LD object is **derive
 from each ADR's frontmatter and body and validated against the chosen level. You do
 not write JSON-LD — you fill frontmatter, and the projector assembles and checks it.
 
-The capability ships as a self-contained plugin under `.github/` with vendored,
-checksum-pinned MIF schemas.
+The capability ships as a self-contained Claude Code plugin homed at `.github/`
+(its root holds `.claude-plugin/plugin.json`, `commands/`, `agents/`, `skills/`, and
+`hooks/`), with vendored, checksum-pinned MIF schemas. The repository is also a plugin
+marketplace (`.claude-plugin/marketplace.json`), so the plugin is installable.
+
+## Use it as a Claude Code plugin
+
+The `mif-compliance` skill, the `/mif-validate` and `/mif-project` commands, the
+`adr-mif-author` agent, and an authoring-time `PostToolUse` hook load once the plugin
+is installed:
+
+```text
+/plugin marketplace add modeled-information-format/structured-madr
+/plugin install structured-madr-mif@structured-madr
+```
+
+Contributors who clone this repository are prompted to enable it automatically once
+they trust the folder — `.claude/settings.json` registers the marketplace and enables
+the plugin at project scope. The PostToolUse hook is advisory (it warns, it does not
+block) unless `MIF_HOOK_STRICT=1` is set.
 
 ## Select the level
 
