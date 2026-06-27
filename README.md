@@ -215,6 +215,13 @@ canonical; a MIF JSON-LD object is derived from frontmatter + body and validated
 against per-level profiles. Run `npm run validate:mif`, or use the published Action
 with `mode: mif`. See the [MIF Compliance reference](https://smadr.dev/reference/mif-compliance/).
 
+### LLM-friendly documentation
+
+The docs site publishes [`llms.txt`](https://smadr.dev/llms.txt) (with
+`llms-full.txt` and `llms-small.txt`) following the
+[llms.txt convention](https://llmstxt.org/). These are generated at build time by
+the `starlight-llms-txt` plugin and are never hand-edited.
+
 ### GitHub Action
 
 Add automated validation to your CI/CD pipeline:
