@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // MIF conformance validator for structured-MADR ADRs.
 //
-// Reads the conformance level from .github/mif/config.yml (in the CONSUMER repo /
+// Reads the conformance level from .github/config.yml (in the CONSUMER repo /
 // cwd), projects every ADR to a MIF object (mif-project.js), and validates it
 // against the level profile using the VENDORED MIF schemas (resolved from the
 // ACTION path so a downstream `uses: ./` resolves them). Fail-closed at the level.
 //
-// Usage: node .github/mif/bin/mif-validate.js [--level N] [--path DIR]
+// Usage: node .github/bin/mif-validate.js [--level N] [--path DIR]
 //                                             [--pattern GLOB] [--config FILE]
 // MIF mode is error-only (fail-closed); there is no warning tier, so no --strict.
 // Outputs (GITHUB_OUTPUT): mif-valid, mif-total, mif-passed, mif-failed.
@@ -37,9 +37,9 @@ function parseArgs(argv) {
 // Vendored schemas live with the action; ADRs + config live in the consumer cwd.
 function schemaDir() {
   const ap = process.env.GITHUB_ACTION_PATH;
-  if (ap && existsSync(join(ap, ".github/mif/schema/mif.schema.json")))
-    return join(ap, ".github/mif/schema");
-  return join(here, "..", "schema"); // .github/mif/bin -> .github/mif/schema
+  if (ap && existsSync(join(ap, ".github/schema/mif.schema.json")))
+    return join(ap, ".github/schema");
+  return join(here, "..", "schema"); // .github/bin -> .github/schema
 }
 
 function buildValidators(S) {
@@ -68,7 +68,7 @@ function assertConfigValid(S, file, cfg) {
   if (!validate(cfg)) {
     for (const err of (validate.errors || []).slice(0, 5))
       console.log(`::error file=${file}::MIF config invalid: ${err.instancePath || "/"} ${err.message}`);
-    console.log(`::error::Refusing to run with an invalid ${file} (fail-closed). Validate it against .github/mif/schema/config.schema.json.`);
+    console.log(`::error::Refusing to run with an invalid ${file} (fail-closed). Validate it against .github/schema/config.schema.json.`);
     process.exit(2);
   }
 }
@@ -93,7 +93,7 @@ function setOutputs(o) {
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  const configFile = args.config || ".github/mif/config.yml";
+  const configFile = args.config || ".github/config.yml";
   const cfg = loadConfig(configFile);
   const S = schemaDir();
   if (existsSync(configFile)) assertConfigValid(S, configFile, cfg);

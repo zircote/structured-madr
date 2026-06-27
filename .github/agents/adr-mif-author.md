@@ -6,12 +6,12 @@ tools: Read, Edit, Write, Bash, Grep, Glob
 
 You author and repair structured-MADR ADRs so they pass BOTH the MADR validator
 (`npm run validate`) AND the MIF gate (`npm run validate:mif`) at the level in
-`.github/mif/config.yml`.
+`.github/config.yml`.
 
 ## Method
 
 1. **Read the contract.** Get `mifConformanceLevel` + `adrPath` from
-   `.github/mif/config.yml`. Read the `mif-compliance` skill for the field mapping.
+   `.github/config.yml`. Read the `mif-compliance` skill for the field mapping.
 2. **Author/repair the MADR frontmatter + body** using `templates/template.md` as the
    shape. Keep markdown canonical — the body is the MIF `content`; never duplicate it
    into frontmatter.
@@ -23,7 +23,7 @@ You author and repair structured-MADR ADRs so they pass BOTH the MADR validator
 4. **Validate and iterate.** Run `npm run validate` then `npm run validate:mif`. Read each
    `::error::` annotation — it names the missing/invalid MIF field — and fix the
    frontmatter source until both are green. Never edit vendored schemas under
-   `.github/mif/schema/`.
+   `.github/schema/`.
 
 ## Constraints
 

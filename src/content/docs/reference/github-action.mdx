@@ -60,14 +60,14 @@ The action sets these outputs for use in subsequent workflow steps.
 Set `mode: mif` to validate ADRs as MIF (Modeled Information Format) instead of the
 MADR frontmatter check. Each invocation runs exactly one mode: `smadr` (default) or
 `mif`. To run both, add two separate steps — one with `mode: smadr` and one with
-`mode: mif`. The level is read from the consumer repo's `.github/mif/config.yml`
+`mode: mif`. The level is read from the consumer repo's `.github/config.yml`
 unless overridden.
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
 | `mode` | `string` | `smadr` | `smadr` (MADR frontmatter) or `mif` (MIF conformance) |
 | `mif-level` | `string` | `""` | Override the MIF level (1/2/3); empty reads `mif-config` |
-| `mif-config` | `string` | `.github/mif/config.yml` | Path to the MIF config in the consumer repo |
+| `mif-config` | `string` | `.github/config.yml` | Path to the MIF config in the consumer repo |
 
 ```yaml
 - uses: modeled-information-format/structured-madr@v1

@@ -8,12 +8,12 @@ level you select. The markdown stays canonical; a MIF JSON-LD object is **derive
 from each ADR's frontmatter and body and validated against the chosen level. You do
 not write JSON-LD — you fill frontmatter, and the projector assembles and checks it.
 
-The capability ships as a self-contained plugin under `.github/mif/` with vendored,
+The capability ships as a self-contained plugin under `.github/` with vendored,
 checksum-pinned MIF schemas.
 
 ## Select the level
 
-Edit the one config file, `.github/mif/config.yml`:
+Edit the one config file, `.github/config.yml`:
 
 ```yaml
 version: 1.0.0
@@ -54,7 +54,7 @@ override the derivation; they are deep-validated against the MIF schema after pr
 ## Run the gate
 
 ```bash
-npm run validate:mif                 # uses .github/mif/config.yml
+npm run validate:mif                 # uses .github/config.yml
 npm run validate:mif -- --level 3    # override the level
 ```
 
@@ -76,6 +76,6 @@ ADRs as MIF from the same Action it already uses (see [GitHub Action](/reference
 
 ## Vendored schemas
 
-`.github/mif/schema/` mirrors MIF `develop/v1.0.0` verbatim; `.github/mif/VENDOR.lock`
+`.github/schema/` mirrors MIF `develop/v1.0.0` verbatim; `.github/VENDOR.lock`
 pins the commit and a per-file SHA-256. A `vendor-check` CI gate fails if any vendored
 file drifts. Do not hand-edit vendored schemas — re-vendor and regenerate the lock.
