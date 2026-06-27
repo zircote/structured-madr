@@ -93,7 +93,14 @@ function setOutputs(o) {
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  const configFile = args.config || ".github/config.yml";
+  // Resolve the config path. The plugin now homes config at .github/config.yml, but a
+  // consumer set up against the published action may still have the legacy
+  // .github/mif/config.yml. If the resolved path is absent and the legacy one exists,
+  // use the legacy file so the consumer's level/adrPath are honored, not silently dropped.
+  let configFile = args.config || ".github/config.yml";
+  if (!existsSync(configFile) && existsSync(".github/mif/config.yml")) {
+    configFile = ".github/mif/config.yml";
+  }
   const cfg = loadConfig(configFile);
   const S = schemaDir();
   if (existsSync(configFile)) assertConfigValid(S, configFile, cfg);
