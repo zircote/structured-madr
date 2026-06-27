@@ -8,7 +8,7 @@ version: 1.0.0
 
 structured-MADR markdown stays canonical. A MIF JSON-LD object is **derived** from
 each ADR's frontmatter + body and validated against the level selected in
-`.github/mif/config.yml` (`mifConformanceLevel: 1|2|3`, default 2). You do not write
+`.github/config.yml` (`mifConformanceLevel: 1|2|3`, default 2). You do not write
 JSON-LD; you fill frontmatter, and the projector assembles + validates it.
 
 ## What each level requires (content-dependent)
@@ -51,7 +51,7 @@ derivation; they are deep-validated against the MIF schema after projection.
 
 ## Notes
 
-- The MIF schemas are vendored under `.github/mif/schema/` and pinned in `VENDOR.lock`
+- The MIF schemas are vendored under `.github/schema/` and pinned in `VENDOR.lock`
   (MIF `develop/v1.0.0`). Do not hand-edit vendored files; bump the vendor instead.
 - To type ADRs as MIF entities, enable the `structured-madr` ontology in
-  `.github/mif/config.yml` `ontologies[]`; the projection then stamps `entity.entity_type: adr`.
+  `.github/config.yml` `ontologies[]`; the projection then stamps `entity.entity_type: adr`.

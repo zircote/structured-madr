@@ -3,7 +3,7 @@
 #
 # Types structured-MADR Architecture Decision Records as MIF entities
 # (entity_type: adr) under the _semantic/decisions namespace. Opt-in via
-# .github/mif/config.yml ontologies[] (id: structured-madr, enabled: true);
+# .github/config.yml ontologies[] (id: structured-madr, enabled: true);
 # when enabled, the projector stamps each ADR's MIF object with
 # ontology={id,version} + entity={name, entity_type: adr}.
 #

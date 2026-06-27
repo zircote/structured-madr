@@ -1,6 +1,6 @@
 ---
 title: "Adopt MIF Compliance (selectable L1/L2/L3)"
-description: "Make every structured-MADR ADR MIF-conformant at a user-selected level, with MIF authored in frontmatter and validated as a derived JSON-LD projection by a plugin homed in .github/mif."
+description: "Make every structured-MADR ADR MIF-conformant at a user-selected level, with MIF authored in frontmatter and validated as a derived JSON-LD projection by a plugin homed in .github."
 type: adr
 category: architecture
 tags:
@@ -86,7 +86,7 @@ existing MADR fields; `content` is always the body.
 **Technical Characteristics**:
 - One source file per ADR; no separate authored artifact.
 - A `mif-project.js` assembler and an Ajv2020 `mif-validate.js` gate.
-- Vendored, pinned MIF schemas under `.github/mif/schema/`.
+- Vendored, pinned MIF schemas under `.github/schema/`.
 
 **Advantages**:
 - No body duplication; consistent with MIF ADR-011 and ADR-002.
@@ -144,9 +144,9 @@ existing MADR fields; `content` is always the body.
 ## Decision
 
 Adopt **Option 1**. MIF is authored in ADR frontmatter and validated as a derived
-JSON-LD projection at the level selected in `.github/mif/config.yml`
+JSON-LD projection at the level selected in `.github/config.yml`
 (`mifConformanceLevel`, default 2). A self-contained Claude Code plugin homed in
-`.github/mif/` carries vendored, pinned MIF schemas, per-level profiles, a
+`.github/` carries vendored, pinned MIF schemas, per-level profiles, a
 projector, a validator, an ADR-typing ontology, and authoring aids. The published
 composite Action gains a `mode: mif` so downstream consumers get MIF validation;
 the repository dogfoods the gate in its own CI.
@@ -191,7 +191,7 @@ content-dependent fail-closed gate so sparse ADRs are not rejected. Mitigations:
 ## More Information
 
 - **Date:** 2026-06-26
-- **Source:** `.github/mif/` (config, schemas, projector, validator, ontology, plugin); `action.yml`; `.github/workflows/ci.yml`.
+- **Source:** `.github/` (config, schemas, projector, validator, ontology, plugin); `action.yml`; `.github/workflows/ci.yml`.
 - **Related ADRs:** ADR-0001, ADR-0002
 
 ## Audit
@@ -204,13 +204,13 @@ content-dependent fail-closed gate so sparse ADRs are not rejected. Mitigations:
 
 | Finding | Files | Lines | Assessment |
 |---------|-------|-------|------------|
-| MIF schemas vendored and checksum-pinned to MIF develop/v1.0.0 | `.github/mif/VENDOR.lock` | L1-L44 | compliant |
-| Projector + validator pass at L1/L2/L3 over all ADRs and examples | `.github/mif/bin/` | n/a | compliant |
+| MIF schemas vendored and checksum-pinned to MIF develop/v1.0.0 | `.github/VENDOR.lock` | L1-L44 | compliant |
+| Projector + validator pass at L1/L2/L3 over all ADRs and examples | `.github/bin/` | n/a | compliant |
 | Composite action exposes `mode: mif`; CI dogfoods the gate | `action.yml`, `.github/workflows/ci.yml` | n/a | compliant |
 
 **Summary:** The MIF compliance plugin is in place and green: vendored schemas
 match `VENDOR.lock`, every ADR projects clean at the configured level, and the CI
 gate plus the `mode: mif` action surface are wired. The conformance level is
-selectable in `.github/mif/config.yml`.
+selectable in `.github/config.yml`.
 
 **Action Required:** None.

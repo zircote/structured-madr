@@ -10,7 +10,7 @@ each ADR's frontmatter + body (MIF ADR-011) and validated against the level chos
 ## Layout
 
 ```
-.github/mif/
+.github/
   config.yml            # the one file you edit — selects the conformance level
   schema/               # VENDORED MIF schemas (pinned in VENDOR.lock) + config + level profiles
   ontologies/           # ADR-typing ontology (opt-in)
@@ -30,5 +30,5 @@ each ADR's frontmatter + body (MIF ADR-011) and validated against the level chos
 ## Vendored schemas
 
 `schema/` mirrors MIF `develop/v1.0.0` verbatim; `VENDOR.lock` pins the commit and a
-per-file sha256. Do not hand-edit — bump the vendor and re-run `node .github/mif/bin/vendor-check.js`.
+per-file sha256. Do not hand-edit — bump the vendor and re-run `node .github/bin/vendor-check.js`.
 To re-vendor: copy the upstream files, then regenerate `VENDOR.lock` checksums.

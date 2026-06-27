@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "structured-madr",
+  "owner": {
+    "name": "modeled-information-format",
+    "url": "https://github.com/modeled-information-format"
+  },
+  "plugins": [
+    {
+      "name": "structured-madr-mif",
+      "source": "./.github",
+      "description": "Validate structured-MADR ADRs as MIF (Modeled Information Format) at a user-selected conformance level (1|2|3, set in .github/config.yml). Ships a per-level projector and Ajv2020 validator, vendored + checksum-pinned MIF schemas, an ADR-typing ontology, the mif-compliance authoring skill, the /mif-validate and /mif-project commands, an adr-mif-author agent, and an authoring-time PostToolUse hook.",
+      "category": "validation",
+      "tags": ["mif", "adr", "structured-madr", "conformance", "json-schema"]
+    }
+  ]
+}

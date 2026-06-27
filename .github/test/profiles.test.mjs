@@ -1,5 +1,5 @@
 // Golden wiring test: load vendored MIF schemas + level profiles via Ajv2020 and
-// validate hand-built per-level objects. Run: node .github/mif/test/profiles.test.mjs
+// validate hand-built per-level objects. Run: node .github/test/profiles.test.mjs
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";

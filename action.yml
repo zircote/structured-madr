@@ -18,7 +18,7 @@ inputs:
   mif-config:
     description: 'Path to the MIF config (relative to the consumer repo)'
     required: false
-    default: '.github/mif/config.yml'
+    default: '.github/config.yml'
   path:
     description: 'Path to the directory containing ADR files (relative to repository root)'
     required: false
@@ -110,4 +110,4 @@ runs:
         # MIF mode is fail-closed (error-only); `strict` does not apply here.
         args=(--path "$INPUT_PATH" --pattern "$INPUT_PATTERN" --config "$INPUT_MIF_CONFIG")
         if [ -n "$INPUT_MIF_LEVEL" ]; then args+=(--level "$INPUT_MIF_LEVEL"); fi
-        node "$GITHUB_ACTION_PATH/.github/mif/bin/mif-validate.js" "${args[@]}"
+        node "$GITHUB_ACTION_PATH/.github/bin/mif-validate.js" "${args[@]}"
