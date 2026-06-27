@@ -296,7 +296,7 @@ Structured MADR's frontmatter enables AI tools to:
 
 ### Plugins
 
-- **[ADR Plugin for Claude Code](https://github.com/modeled-information-format/marketplace/tree/main/plugins/adr)** - Full lifecycle management
+- **[ADR Plugin for Claude Code](https://github.com/zircote/marketplace/tree/main/plugins/adr)** - Full lifecycle management
 
 ## Resources
 
