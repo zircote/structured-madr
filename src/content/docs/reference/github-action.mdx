@@ -57,9 +57,11 @@ The action sets these outputs for use in subsequent workflow steps.
 
 ## MIF conformance mode
 
-Set `mode: mif` to validate ADRs as MIF (Modeled Information Format) instead of (or
-in addition to) the MADR frontmatter check. The level is read from the consumer
-repo's `.github/mif/config.yml` unless overridden.
+Set `mode: mif` to validate ADRs as MIF (Modeled Information Format) instead of the
+MADR frontmatter check. Each invocation runs exactly one mode: `smadr` (default) or
+`mif`. To run both, add two separate steps — one with `mode: smadr` and one with
+`mode: mif`. The level is read from the consumer repo's `.github/mif/config.yml`
+unless overridden.
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -75,8 +77,10 @@ repo's `.github/mif/config.yml` unless overridden.
     # mif-level: 3
 ```
 
-Outputs in this mode: `mif-valid`, `mif-total`, `mif-passed`, `mif-failed`. See the
-[MIF Compliance reference](/reference/mif-compliance/) for the level model and field mapping.
+Outputs in this mode: `mif-valid`, `mif-total`, `mif-passed`, `mif-failed`. The
+standard outputs (`valid`, `total`, `passed`, `failed`, `warnings`) are **not** set in
+`mode: mif` — the MADR validation step is skipped — so read the `mif-*` outputs instead.
+See the [MIF Compliance reference](/reference/mif-compliance/) for the level model and field mapping.
 
 ## Configuration Examples
 

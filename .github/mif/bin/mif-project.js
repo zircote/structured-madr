@@ -61,9 +61,11 @@ export function projectAdr(fm, body, opts = {}) {
   const f = fm || {};
   const project = f.project || "smadr";
   const slug = fileSlug(opts.filename);
+  // A full `urn:mif:` id is used verbatim; a bare UUID/slug `id` becomes the URN's
+  // last segment (so the documented override is effective); else fall back to the file slug.
   const id = f.id && /^urn:mif:/.test(f.id)
     ? f.id
-    : `urn:mif:smadr:${slugify(project)}:${slug || slugify(f.id) || "adr"}`;
+    : `urn:mif:smadr:${slugify(project)}:${f.id ? slugify(f.id) : slug || "adr"}`;
 
   // ---- Level 1 (core) ----
   const obj = {
@@ -93,7 +95,9 @@ export function projectAdr(fm, body, opts = {}) {
     if (f["x-superseded-by"]) {
       rels.push({ type: "supersedes", target: `/decisions/${f["x-superseded-by"]}` });
     }
-    for (const r of f.related || []) {
+    // Guard: a stray `related: "x"` (not an array) must not iterate char-by-char
+    // into bogus relationships — mode:mif skips the MADR schema that would catch it.
+    for (const r of Array.isArray(f.related) ? f.related : []) {
       rels.push({ type: "relates-to", target: `/decisions/${r}` });
     }
     if (rels.length) obj.relationships = rels;

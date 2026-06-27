@@ -7,7 +7,8 @@
 // ACTION path so a downstream `uses: ./` resolves them). Fail-closed at the level.
 //
 // Usage: node .github/mif/bin/mif-validate.js [--level N] [--path DIR]
-//                                             [--pattern GLOB] [--config FILE] [--strict]
+//                                             [--pattern GLOB] [--config FILE]
+// MIF mode is error-only (fail-closed); there is no warning tier, so no --strict.
 // Outputs (GITHUB_OUTPUT): mif-valid, mif-total, mif-passed, mif-failed.
 
 import { readFileSync, existsSync, appendFileSync } from "node:fs";
@@ -22,14 +23,13 @@ import { projectAdr } from "./mif-project.js";
 const here = dirname(fileURLToPath(import.meta.url));
 
 function parseArgs(argv) {
-  const a = { strict: false };
+  const a = {};
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--level") a.level = Number(argv[++i]);
     else if (k === "--path") a.path = argv[++i];
     else if (k === "--pattern") a.pattern = argv[++i];
     else if (k === "--config") a.config = argv[++i];
-    else if (k === "--strict") a.strict = true;
   }
   return a;
 }

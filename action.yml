@@ -106,9 +106,8 @@ runs:
         INPUT_PATTERN: ${{ inputs.pattern }}
         INPUT_MIF_CONFIG: ${{ inputs.mif-config }}
         INPUT_MIF_LEVEL: ${{ inputs.mif-level }}
-        INPUT_STRICT: ${{ inputs.strict }}
       run: |
+        # MIF mode is fail-closed (error-only); `strict` does not apply here.
         args=(--path "$INPUT_PATH" --pattern "$INPUT_PATTERN" --config "$INPUT_MIF_CONFIG")
         if [ -n "$INPUT_MIF_LEVEL" ]; then args+=(--level "$INPUT_MIF_LEVEL"); fi
-        if [ "$INPUT_STRICT" = "true" ]; then args+=(--strict); fi
         node "$GITHUB_ACTION_PATH/.github/mif/bin/mif-validate.js" "${args[@]}"
