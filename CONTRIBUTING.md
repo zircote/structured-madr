@@ -118,6 +118,15 @@ npx ajv validate -s schemas/structured-madr.schema.json -d examples/*.md --spec=
 # Or use any JSON Schema validator
 ```
 
+## Release Process
+
+Releases for this repository follow the org-wide, audit-gated attested release process. The
+governing process — punch-list audit, epics and sub-issues, a decision log, a release workplan
+issue, one PR per epic under GitHub Flow, and the attested cutover — is documented in the
+[org release runbook](https://github.com/modeled-information-format/.github/blob/main/docs/runbooks/release-runbook.md).
+See [org governance & release runbooks](docs/reference/org-governance.md) for that runbook and
+the related branch-protection, Dependabot auto-merge, and labels runbooks.
+
 ## Questions?
 
 - Open a discussion for general questions
